@@ -3,154 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kenangan Kelas By FengXiu</title>
+    <title id="appTitle">FengXiu Mega Project Hub</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: 'Poppins', sans-serif;
+            transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
         }
         body {
-            background: linear-gradient(135deg, #2c1e14, #4a3728);
-            color: #f4e4d7;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow-x: hidden;
             padding: 20px 10px;
+            position: relative;
+            background-size: cover !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
         }
+        body.theme-kenangan { background: linear-gradient(135deg, #2c1e14, #4a3728); color: #f4e4d7; }
+        body.theme-bucin { background: linear-gradient(135deg, #2b1217, #4a1525); color: #ffe3e8; }
+        body.theme-birthday { background: linear-gradient(135deg, #120b24, #241442); color: #e0e0ff; }
+
+        .heart-fly {
+            position: absolute;
+            bottom: -30px;
+            font-size: 24px;
+            pointer-events: none;
+            animation: flyUp 4s linear infinite;
+            opacity: 0.8;
+            z-index: 1;
+        }
+        @keyframes flyUp {
+            0% { transform: translateY(0) scale(0.5); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-105vh) scale(1.2); opacity: 0; }
+        }
+
+        .theme-selector-wrap {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .theme-select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .theme-select option {
+            background: #1e1e1e;
+            color: #fff;
+        }
+
         .panel {
             width: 100%;
             max-width: 400px;
-            background: rgba(255, 250, 240, 0.08);
+            background: rgba(255, 255, 255, 0.06);
             backdrop-filter: blur(15px);
-            border: 1px solid rgba(212, 163, 115, 0.25);
             border-radius: 24px;
             padding: 30px;
             box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3);
             text-align: center;
             z-index: 10;
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
+        body.theme-kenangan .panel { border-color: rgba(212, 163, 115, 0.25); }
+        body.theme-bucin .panel { border-color: rgba(255, 71, 87, 0.3); box-shadow: 0 10px 35px rgba(255, 71, 87, 0.15); }
+        body.theme-birthday .panel { border-color: rgba(76, 201, 240, 0.3); box-shadow: 0 10px 35px rgba(76, 201, 240, 0.15); }
+
         .banner-box {
             width: 100%;
             height: 160px;
-            background: #d4a373;
             border-radius: 18px;
             margin-bottom: 22px;
             overflow: hidden;
-            border: 3px solid #faedcd;
+            border: 3px solid rgba(255,255,255,0.2);
         }
-        .banner-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .banner-box img { width: 100%; height: 100%; object-fit: cover; }
+
         h1 {
             font-size: 26px;
-            color: #faedcd;
             margin-bottom: 5px;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
             font-weight: 700;
+            color: #fff;
         }
         .subtitle {
             font-size: 10px;
-            color: #d4a373;
             letter-spacing: 4px;
             text-transform: uppercase;
             margin-bottom: 30px;
             font-weight: 600;
         }
-        .input-group {
-            text-align: left;
-            margin-bottom: 14px;
-        }
+        body.theme-kenangan .subtitle { color: #d4a373; }
+        body.theme-bucin .subtitle { color: #ff4757; }
+        body.theme-birthday .subtitle { color: #4cc9f0; }
+
+        .input-group { text-align: left; margin-bottom: 14px; }
         label {
             display: block;
             font-size: 11px;
-            color: #faedcd;
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 5px;
             font-weight: 600;
+            color: rgba(255,255,255,0.8);
         }
         input, textarea {
             width: 100%;
             padding: 12px 16px;
-            background: rgba(44, 30, 20, 0.6);
-            border: 1px solid #d4a373;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255,255,255,0.2);
             border-radius: 12px;
             color: #ffffff;
             font-size: 14px;
             outline: none;
-            transition: all 0.3s;
         }
-        textarea {
-            resize: none;
-            height: 75px;
+        textarea { resize: none; height: 75px; }
+        
+        body.theme-kenangan input:focus, body.theme-kenangan textarea:focus { border-color: #faedcd; }
+        body.theme-bucin input:focus, body.theme-bucin textarea:focus { border-color: #ff4757; }
+        body.theme-birthday input:focus, body.theme-birthday textarea:focus { border-color: #4cc9f0; }
+
+        .file-upload-btn {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px dashed rgba(255,255,255,0.3);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
         }
-        input:focus, textarea:focus {
-            border-color: #faedcd;
-            box-shadow: 0 0 10px rgba(250, 237, 205, 0.3);
-        }
+
         .btn {
             width: 100%;
             padding: 14px;
-            background: #d4a373;
             border: none;
             border-radius: 12px;
-            color: #2c1e14;
+            color: #fff;
             font-size: 14px;
             font-weight: 700;
             letter-spacing: 1px;
             cursor: pointer;
             text-transform: uppercase;
-            transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(212, 163, 115, 0.3);
         }
-        .btn:hover {
-            background: #faedcd;
-            transform: translateY(-1px);
-        }
-        .btn-danger {
-            background: #9b2226;
-            color: #ffffff;
-            box-shadow: 0 4px 15px rgba(155, 34, 38, 0.3);
-        }
-        .btn-danger:hover {
-            background: #ae2012;
-        }
-        .btn:disabled {
-            background: #5c4d42;
-            color: #a3958a;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
+        body.theme-kenangan .btn { background: #d4a373; color: #2c1e14; }
+        body.theme-bucin .btn { background: #ff4757; color: #fff; }
+        body.theme-birthday .btn { background: #7209b7; color: #fff; }
+
         .video-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #2c1e14;
+            background: #000;
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 999;
         }
-        .video-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
+        .video-container video { width: 100%; height: 100%; object-fit: contain; }
         .skip-btn {
             position: absolute;
             top: 20px;
             right: 20px;
-            background: #d4a373;
-            color: #2c1e14;
+            background: #fff;
+            color: #000;
             padding: 8px 20px;
             border: none;
             border-radius: 20px;
@@ -158,8 +192,8 @@
             font-size: 12px;
             font-weight: 700;
             z-index: 1000;
-            text-transform: uppercase;
         }
+
         .main-dashboard {
             position: fixed;
             top: 0;
@@ -172,24 +206,25 @@
             z-index: 100;
             overflow-y: auto;
             padding: 40px 15px;
-            background: #2c1e14;
         }
+        body.theme-kenangan .main-dashboard { background: #2c1e14; }
+        body.theme-bucin .main-dashboard { background: #2b1217; }
+        body.theme-birthday .main-dashboard { background: #120b24; }
+
         .control-panel {
-            position: relative;
-            z-index: 2;
             width: 100%;
             max-width: 500px;
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(212, 163, 115, 0.3);
+            border: 1px solid rgba(255,255,255,0.15);
             border-radius: 20px;
             padding: 24px;
             backdrop-filter: blur(15px);
             margin-bottom: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
+
         .result-box {
-            background: rgba(212, 163, 115, 0.15);
-            border: 1px dashed #faedcd;
+            background: rgba(255,255,255,0.1);
+            border: 1px dashed rgba(255,255,255,0.4);
             padding: 15px;
             border-radius: 12px;
             margin-top: 15px;
@@ -197,9 +232,8 @@
             display: none;
             text-align: center;
         }
+
         .grid-container {
-            position: relative;
-            z-index: 2;
             width: 100%;
             max-width: 1000px;
             display: grid;
@@ -209,82 +243,57 @@
         }
         .card-kenangan {
             background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(212, 163, 115, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
             backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
         }
-        .card-kenangan:hover {
-            transform: translateY(-6px);
-            border-color: #faedcd;
-            box-shadow: 0 12px 25px rgba(212, 163, 115, 0.2);
-        }
-        .card-img-box {
+        .card-img-box { width: 100%; height: 200px; overflow: hidden; background: rgba(0,0,0,0.2); }
+        .card-img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .card-info { padding: 15px; text-align: center; }
+        .card-nama { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: #fff; }
+        .card-caption { font-size: 12px; opacity: 0.8; font-style: italic; line-height: 1.4; }
+
+        .bucin-display-container {
             width: 100%;
-            height: 200px;
-            background: rgba(44, 30, 20, 0.5);
-            overflow: hidden;
-        }
-        .card-img-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: 0.4s;
-        }
-        .card-kenangan:hover .card-img-box img {
-            transform: scale(1.05);
-        }
-        .card-info {
-            padding: 15px;
-            text-align: center;
-        }
-        .card-nama {
-            font-size: 16px;
-            font-weight: 700;
-            color: #faedcd;
-            margin-bottom: 6px;
-        }
-        .card-caption {
-            font-size: 12px;
-            color: #d4a373;
-            font-style: italic;
-            line-height: 1.4;
-        }
-        .watermark {
-            font-size: 9px;
-            color: #6d5f54;
-            letter-spacing: 2px;
-            margin-top: 20px;
-            font-weight: 700;
-            text-transform: uppercase;
-            text-align: center;
-        }
-        .music-btn {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            width: 48px;
-            height: 48px;
-            background: #d4a373;
-            border-radius: 50%;
-            display: flex;
+            max-width: 400px;
+            display: none;
             justify-content: center;
             align-items: center;
-            z-index: 200;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(212, 163, 115, 0.5);
-            font-size: 18px;
-            color: #2c1e14;
+            z-index: 105;
         }
+        .bucin-card {
+            background: rgba(15, 15, 15, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 35px 25px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 25px rgba(255, 105, 180, 0.4);
+        }
+        .foto-profil { width: 100px; height: 100px; border-radius: 50%; border: 3px solid white; object-fit: cover; margin-bottom: 20px; }
+        .svg-icon { width: 80px; height: 80px; margin: 10px auto 20px auto; fill: #ffb6c1; display: block; }
+        
+        .watermark { font-size: 9px; opacity: 0.4; letter-spacing: 2px; margin-top: 20px; font-weight: 700; text-transform: uppercase; text-align: center; color: #fff; }
+        .music-btn { position: fixed; bottom: 25px; right: 25px; width: 48px; height: 48px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 200; cursor: pointer; font-size: 18px; color: #fff; border: 1px solid rgba(255,255,255,0.3); }
     </style>
 </head>
-<body>
+<body class="theme-kenangan">
 
 <div class="panel" id="loginPanel">
+    <div class="theme-selector-wrap">
+        <label>Pilih Tema Project</label>
+        <select class="theme-select" id="themeSelector" onchange="gantiTemaAwal(this.value)">
+            <option value="kenangan">📂 Web Kenangan Kelas</option>
+            <option value="bucin">❤️ Web Bucin / Ucapan Romantis</option>
+            <option value="birthday">🎉 Web Happy Birthday Pesta</option>
+        </select>
+    </div>
+
     <div class="banner-box">
-        <img src="https://c.top4top.io/p_3838ghicg1.jpg">
+        <img id="loginBanner" src="https://c.top4top.io/p_3838ghicg1.jpg">
     </div>
     <h1 id="mainTitle">Kenangan Kelas</h1>
     <div class="subtitle" id="mainSubtitle">Story Of Our Memory</div>
@@ -296,56 +305,92 @@
         <div class="input-group">
             <input type="password" id="password" placeholder="Password">
         </div>
-        <button class="btn" onclick="prosesLogin()">Masuk Kenangan</button>
+        <button class="btn" onclick="prosesLogin()">Masuk Dashboard</button>
     </div>
     <div class="watermark">BY FENGXIU</div>
 </div>
 
 <div class="video-container" id="introContainer">
     <button class="skip-btn" onclick="lewatiIntro()">Lewati Intro ➔</button>
-    <video id="introVideo" playsinline>
-        <source id="videoSource" src="" type="video/mp4">
-    </video>
+    <video id="introVideo" playsinline><source id="videoSource" src="" type="video/mp4"></video>
 </div>
 
 <div class="main-dashboard" id="dashboardPanel">
     <div class="control-panel" id="adminControl">
-        <h1 style="font-size: 20px; color: #faedcd; text-align: center;">Kenangan Generator Panel</h1>
-        <div class="subtitle" style="margin-bottom: 20px; color: #d4a373; text-align: center;">Create Unique Web Memory</div>
+        <h1 style="font-size: 20px; text-align: center;" id="panelTitle">Generator Panel</h1>
+        <div class="subtitle" style="margin-bottom: 20px; text-align: center;">Multi Function Engine Studio</div>
         
         <div class="input-group">
-            <label>Nama / Judul Web Kenangan</label>
-            <input type="text" id="webTitle" placeholder="Contoh: XII Garuda Elit">
+            <label id="lblTitle">Nama / Judul Web</label>
+            <input type="text" id="webTitle" placeholder="Masukkan judul halaman...">
         </div>
         <div class="input-group">
-            <label>Link Lagu MP3 Khusus Web Ini</label>
-            <input type="text" id="webMusic" placeholder="Contoh: https://domain.com/lagu.mp3">
+            <label>Link Lagu MP3 Latar Belakang</label>
+            <input type="text" id="webMusic" placeholder="Link audio .mp3 direct...">
         </div>
-        <div class="input-group">
-            <label>Nama Teman</label>
-            <input type="text" id="inputNama" placeholder="Contoh: Budi Luw">
+
+        <div class="input-group" id="bgUploadContainer" style="display: none;">
+            <label>Upload Custom Background Web</label>
+            <div class="file-upload-btn" id="bgUploadLabel" onclick="triggerPilihBg()">🖼️ Ambil Background dari Galeri</div>
+            <input type="file" id="fileBgInput" accept="image/*" style="display: none;" onchange="handleBgUpload(this)">
+            <input type="hidden" id="inputCustomBg" value="">
         </div>
+
         <div class="input-group">
-            <label>Link Foto / Gambar</label>
-            <input type="text" id="inputFoto" placeholder="Contoh: https://top4top.io/...jpg">
-        </div>
-        <div class="input-group">
-            <label>Caption / Pesan Kenangan</label>
-            <textarea id="inputCaption" placeholder="Contoh: Si paling hobi bolos jam kos..."></textarea>
+            <label id="lblTarget">Nama Target / Teman</label>
+            <input type="text" id="inputNama" placeholder="Nama lengkap atau panggilan...">
         </div>
         
-        <button class="btn" id="btnGen" onclick="buatWebBaru()" style="margin-bottom: 10px; background: #faedcd;">🔥 GENERATE WEB BARU</button>
+        <div class="input-group">
+            <label id="lblMedia">Upload File Media / Foto Profil</label>
+            <div class="file-upload-wrapper">
+                <div class="file-upload-btn" id="uploadLabel" onclick="triggerPilihFile()">📁 Ambil dari Galeri HP</div>
+                <input type="file" id="fileFotoInput" accept="image/*" style="display: none;" onchange="handleAutoUpload(this)">
+                <input type="hidden" id="inputFoto" value="">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label id="lblCaption">Isi Pesan / Caption Utama</label>
+            <textarea id="inputCaption" placeholder="Tulis ungkapan kata atau cerita di sini..."></textarea>
+        </div>
         
-        <div style="display: flex; gap: 10px;">
-            <button class="btn" id="btnAdd" onclick="kelolaKenangan('ADD')" style="flex: 1; font-size: 12px;">ADD TO CURRENT</button>
-            <button class="btn btn-danger" id="btnDel" onclick="kelolaKenangan('DEL')" style="flex: 1; font-size: 12px;">DEL FROM CURRENT</button>
+        <button class="btn" id="btnGen" onclick="buatWebBaru()" style="margin-bottom: 10px;">🔥 GENERATE LINK SEKARANG</button>
+        
+        <div style="display: flex; gap: 10px;" id="actionGridGroup">
+            <button class="btn" onclick="kelolaKenangan('ADD')" style="flex: 1; font-size: 11px;">TAMBAH DATA</button>
+            <button class="btn" onclick="kelolaKenangan('DEL')" style="flex: 1; font-size: 11px; background:#9b2226; color:#fff;">HAPUS DATA</button>
         </div>
 
         <div class="result-box" id="resultLink"></div>
-        <div class="watermark" style="margin-top: 15px;">INPUT CONTROLLER BY FENGXIU</div>
+        <div class="watermark" style="margin-top: 15px;">CONTROLLER HUB BY FENGXIU</div>
     </div>
 
     <div class="grid-container" id="galleryContainer"></div>
+</div>
+
+<div class="bucin-display-container" id="bucinDisplayPanel">
+    <div class="bucin-card" id="boxStep1">
+        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        <h1 id="bucinStep1Title">Ada Pesan Spesial ✨</h1>
+        <p id="bucinStep1Desc">Seseorang telah mengirimkan sebuah amplop rahasia penuh makna khusus buat kamu.</p>
+        <button onclick="actionBucinStep1()" class="btn" id="btnColorTheme" style="background:#ff4757; color:#fff;">Buka Amplop 📩</button>
+    </div>
+    <div class="bucin-card" id="boxStep2" style="display: none;">
+        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-6.01 14.04c-.38.33-.87.49-1.37.46-.53-.03-1.01-.28-1.33-.67L5.5 11l1.41-1.41 3.51 3.51L17.09 6.5l1.41 1.41-5.51 9.13z"/></svg>
+        <h1>Ada Surat untuk Mu ✉</h1>
+        <p>Silakan klik tombol di bawah untuk membaca pesan terdalam dariku secara langsung.</p>
+        <button onclick="actionBucinStep2()" class="btn" id="btnColorTheme2" style="background:#ff4757; color:#fff;">Buka Surat 💌</button>
+    </div>
+    <div class="bucin-card" id="boxStep3" style="display: none;">
+        <img class="foto-profil" id="bucinTargetImg" src="" alt="Profile">
+        <h1 id="bucinTargetHeader">For You ❤</h1>
+        <p><span id="ketikTeks"></span></p>
+        <div style="display:none; margin-top:15px;" id="areaBalas">
+            <textarea id="pesanUser" placeholder="Kirim kesan pesan balasan..."></textarea>
+            <button onclick="kirimKeWA()" class="btn" style="background:#25d366; color:#fff; margin-top:10px;">Balas Ke WhatsApp 📩</button>
+        </div>
+    </div>
 </div>
 
 <div class="music-btn" id="btnMusik" onclick="toggleMusik()">🎵</div>
@@ -353,31 +398,97 @@
 
 <script>
     const CONFIG_UTAMA = {
-        link_video_intro: "https://f.top4top.io/m_3838q7ny01.mp4",
-        link_lagu_background_panel: "https://c.top4top.io/m_38386axoq1.mp3"
+        kenangan: { bg: "https://c.top4top.io/p_3838ghicg1.jpg", video: "https://f.top4top.io/m_3838q7ny01.mp4", music: "https://c.top4top.io/m_38386axoq1.mp3" },
+        bucin: { bg: "https://k.top4top.io/p_3839kwmx91.jpg", video: "https://a.top4top.io/m_3839eyrdl1.mp4", music: "https://b.top4top.io/m_3839s6e461.mp3" },
+        birthday: { bg: "https://c.top4top.io/p_3839b69co1.jpg", video: "https://k.top4top.io/m_3839ytt6a1.mp4", music: "https://e.top4top.io/m_383991rwl1.mp3" }
     };
 
-    const p1 = "ghp_Cu0mdkUW0Oe";
-    const p2 = "dbcLnW0fhJkNXXAOPsK0j8MEh";
-    const tokenSempurna = p1 + p2;
+    const tokenSempurna = "ghp_Cu0mdkUW0Oe" + "dbcLnW0fhJkNXXAOPsK0j8MEh";
+    const CONFIG_GH = { token: tokenSempurna, username: "vinzraptor35", repository: "Kenangan_FengXiu" };
 
-    const CONFIG_GH = {
-        token: tokenSempurna,
-        username: "vinzraptor35",
-        repository: "Kenangan_FengXiu"
-    };
-
+    let currentTheme = "kenangan";
     let statusMusik = false;
     let currentWebId = "utama";
     let databaseLengkap = {};
+    let targetBucinData = null;
 
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('id')) {
         currentWebId = urlParams.get('id');
-        document.getElementById('loginForm').style.display = 'none';
-        document.getElementById('mainTitle').innerText = "Memuat Kenangan...";
-        document.getElementById('mainSubtitle').innerText = "ID: " + currentWebId;
-        window.addEventListener('DOMContentLoaded', muatDataDirectly);
+        document.getElementById('loginPanel').style.display = 'none';
+        muatDataDirectly();
+    }
+
+    function gantiTemaAwal(tema) {
+        currentTheme = tema;
+        document.body.className = "theme-" + tema;
+        document.body.style.background = "";
+        
+        const titleMap = { kenangan: "Kenangan Kelas", bucin: "Special For You", birthday: "Happy Birthday Party" };
+        const subtitleMap = { kenangan: "Story Of Our Memory", bucin: "Unconditional Love Romance", birthday: "Wishing You All The Best" };
+        const bannerMap = { kenangan: CONFIG_UTAMA.kenangan.bg, bucin: CONFIG_UTAMA.bucin.bg, birthday: CONFIG_UTAMA.birthday.bg };
+
+        document.getElementById('mainTitle').innerText = titleMap[tema];
+        document.getElementById('mainSubtitle').innerText = subtitleMap[tema];
+        document.getElementById('loginBanner').src = bannerMap[tema];
+        
+        const lblTitle = document.getElementById('lblTitle');
+        const lblTarget = document.getElementById('lblTarget');
+        const lblCaption = document.getElementById('lblCaption');
+        const bgContainer = document.getElementById('bgUploadContainer');
+
+        if(tema === 'kenangan') {
+            lblTitle.innerText = "Nama / Judul Web Kenangan";
+            lblTarget.innerText = "Nama Teman";
+            lblCaption.innerText = "Caption / Pesan Kenangan";
+            bgContainer.style.display = "none";
+        } else {
+            bgContainer.style.display = "block";
+            if(tema === 'bucin') {
+                lblTitle.innerText = "Judul Surat Ucapan";
+                lblTarget.innerText = "Nama Pasangan Kamu";
+                lblCaption.innerText = "Isi Pesan Panjang Sayang";
+            } else {
+                lblTitle.innerText = "Judul Acara Ulang Tahun";
+                lblTarget.innerText = "Nama Yang Berulang Tahun";
+                lblCaption.innerText = "Harapan / Doa Panjang (Wish)";
+            }
+        }
+    }
+
+    function triggerPilihFile() { document.getElementById('fileFotoInput').click(); }
+    function triggerPilihBg() { document.getElementById('fileBgInput').click(); }
+
+    function handleAutoUpload(input) {
+        if (!input.files || !input.files[0]) return;
+        unggahKeImgBB(input.files[0], 'uploadLabel', 'inputFoto');
+    }
+
+    function handleBgUpload(input) {
+        if (!input.files || !input.files[0]) return;
+        unggahKeImgBB(input.files[0], 'bgUploadLabel', 'inputCustomBg');
+    }
+
+    function unggahKeImgBB(file, idLabel, idHiddenInput) {
+        const label = document.getElementById(idLabel);
+        const hiddenInput = document.getElementById(idHiddenInput);
+        
+        label.innerText = "⏳ Memproses Transformasi File Gambar...";
+        
+        const formData = new FormData();
+        formData.append("key", "516da28898e91048c8ea720cf0d92317");
+        formData.append("image", file);
+        
+        fetch("https://api.imgbb.com/1/upload", { method: "POST", body: formData })
+        .then(res => res.json())
+        .then(response => {
+            if (response.success && response.data && response.data.url) {
+                hiddenInput.value = response.data.url;
+                label.innerText = "✅ Berhasil Diubah Menjadi URL Sistem!";
+            } else {
+                label.innerText = "❌ Gagal Eksekusi File.";
+            }
+        }).catch(() => { label.innerText = "❌ Gangguan Sambungan Hosting."; });
     }
 
     function muatDataDirectly() {
@@ -387,76 +498,188 @@
         .then(fileData => {
             if (fileData.content) {
                 databaseLengkap = JSON.parse(atob(fileData.content));
-                if (databaseLengkap[currentWebId]) {
+                const dataWeb = databaseLengkap[currentWebId];
+                if (dataWeb) {
                     document.getElementById('loginPanel').style.display = 'none';
-                    document.getElementById('adminControl').style.display = 'none';
-                    document.getElementById('dashboardPanel').style.display = 'flex';
+                    currentTheme = dataWeb.theme || "kenangan";
+                    document.body.className = "theme-" + currentTheme;
                     
-                    document.title = databaseLengkap[currentWebId].judul || "Kenangan Kelas";
-                    
-                    let laguTarget = databaseLengkap[currentWebId].lagu;
-                    if (!laguTarget || laguTarget === "") {
-                        laguTarget = CONFIG_UTAMA.link_lagu_background_panel;
+                    if(dataWeb.customBg) {
+                        document.body.style.background = `url('${dataWeb.customBg}')`;
+                    }
+
+                    if(currentTheme === 'bucin' || currentTheme === 'birthday') {
+                        setupEfekHatiTerbang();
+                        document.getElementById('dashboardPanel').style.display = 'none';
+                        document.getElementById('bucinDisplayPanel').style.display = 'flex';
+                        targetBucinData = dataWeb;
+                        
+                        const btn1 = document.getElementById('btnColorTheme');
+                        const btn2 = document.getElementById('btnColorTheme2');
+                        if(currentTheme === 'birthday') {
+                            document.getElementById('bucinStep1Title').innerText = "Ada Kado Spesial 🎁";
+                            document.getElementById('bucinStep1Desc').innerText = "Seseorang mengirimkan sebuah kejutan virtual istimewa di hari ulang tahunmu.";
+                            if(btn1) btn1.style.background = "#7209b7";
+                            if(btn2) btn2.style.background = "#7209b7";
+                        }
+                    } else {
+                        document.getElementById('dashboardPanel').style.display = 'flex';
+                        document.getElementById('adminControl').style.display = 'none';
+                        renderGaleri(dataWeb.kenangan || []);
                     }
                     
-                    document.getElementById('bgMusik').src = laguTarget;
-                    document.getElementById('bgMusik').play().then(() => { statusMusik = true; }).catch(() => {});
-                    
-                    renderGaleri(databaseLengkap[currentWebId].kenangan || []);
-                } else {
-                    alert("Maaf King, ID Web Kenangan ini tidak ditemukan!");
-                    window.location.href = window.location.origin + window.location.pathname;
+                    let laguTarget = dataWeb.lagu;
+                    if(!laguTarget || laguTarget === "") {
+                        if(CONFIG_UTAMA[currentTheme]) laguTarget = CONFIG_UTAMA[currentTheme].music;
+                    }
+
+                    if(laguTarget && laguTarget !== "") {
+                        const audioTarget = document.getElementById('bgMusik');
+                        const btn = document.getElementById('btnMusik');
+                        audioTarget.src = laguTarget;
+                        audioTarget.load();
+                        
+                        const paksaPutarGlobal = () => {
+                            audioTarget.play().then(() => {
+                                statusMusik = true;
+                                btn.innerText = "🎵";
+                                window.removeEventListener('click', paksaPutarGlobal);
+                            }).catch(() => {});
+                        };
+                        window.addEventListener('click', paksaPutarGlobal);
+                    }
+                    document.title = dataWeb.judul || "Special Page";
                 }
             }
-        }).catch(() => {});
+        });
+    }
+
+    function setupEfekHatiTerbang() {
+        setInterval(() => {
+            const heart = document.createElement('div');
+            heart.className = 'heart-fly';
+            heart.innerHTML = currentTheme === 'bucin' ? '❤️' : '✨';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 4000);
+        }, 350);
+    }
+
+    function actionBucinStep1() {
+        document.getElementById('boxStep1').style.display = 'none';
+        document.getElementById('boxStep2').style.display = 'block';
+    }
+
+    function actionBucinStep2() {
+        document.getElementById('boxStep2').style.display = 'none';
+        document.getElementById('boxStep3').style.display = 'block';
+        
+        if(targetBucinData && targetBucinData.kenangan && targetBucinData.kenangan[0]) {
+            const item = targetBucinData.kenangan[0];
+            document.getElementById('bucinTargetImg').src = item.foto;
+            document.getElementById('bucinTargetHeader').innerText = (currentTheme === 'bucin' ? "For You: " : "HBD: ") + item.nama;
+            
+            const audioTarget = document.getElementById('bgMusik');
+            const btn = document.getElementById('btnMusik');
+            if(audioTarget.src && audioTarget.src !== "") {
+                audioTarget.play().then(() => { 
+                    statusMusik = true; 
+                    btn.innerText = "🎵";
+                }).catch(() => {
+                    statusMusik = false;
+                    btn.innerText = "🔇";
+                });
+            }
+
+            new Typed('#ketikTeks', {
+                strings: [item.caption],
+                typeSpeed: 50,
+                loop: false,
+                showCursor: true,
+                onComplete: () => { document.getElementById('areaBalas').style.display = 'block'; }
+            });
+        }
+    }
+
+    function kirimKeWA() {
+        const msg = document.getElementById('pesanUser').value.trim();
+        if(!msg) return alert('Tulis reaksimu dulu!');
+        const formatSms = `Halo! Terima kasih ucapan web ${currentTheme.toUpperCase()}-nya.\n\nIni balasan dariku:\n"${msg}"`;
+        window.location.href = "https://wa.me/6285242556628?text=" + encodeURIComponent(formatSms);
     }
 
     function prosesLogin() {
         const u = document.getElementById('username').value;
         const p = document.getElementById('password').value;
-        
-        if (u === 'FengXiu' && p === 'kangen') {
+        if (u === 'FengXiu' && p === '123') {
             document.getElementById('loginPanel').style.display = 'none';
-            const introContainer = document.getElementById('introContainer');
-            const introVideo = document.getElementById('introVideo');
-            const videoSource = document.getElementById('videoSource');
             
-            if(CONFIG_UTAMA.link_video_intro === "MASUKKAN_URL_VIDEO_INTRO_LU_DISINI" || CONFIG_UTAMA.link_video_intro === "") {
-                lewatiIntro();
+            const videoContainer = document.getElementById('introContainer');
+            const videoEl = document.getElementById('introVideo');
+            const videoSrc = document.getElementById('videoSource');
+            
+            if(CONFIG_UTAMA[currentTheme] && CONFIG_UTAMA[currentTheme].video) {
+                videoContainer.style.display = 'flex';
+                videoSrc.src = CONFIG_UTAMA[currentTheme].video;
+                videoEl.load();
+                videoEl.play().catch(() => { lewatiIntro(); });
+                videoEl.onended = function() { lewatiIntro(); };
             } else {
-                introContainer.style.display = 'flex';
-                videoSource.src = CONFIG_UTAMA.link_video_intro;
-                introVideo.load();
-                introVideo.play();
-                introVideo.onended = lewatiIntro;
+                lewatiIntro();
             }
-        } else {
-            alert('Username atau Password salah, King!');
-        }
+        } else { alert('Akses Ditolak!'); }
     }
 
     function lewatiIntro() {
-        try { document.getElementById('introVideo').pause(); } catch(e) {}
+        const videoEl = document.getElementById('introVideo');
+        videoEl.pause();
         document.getElementById('introContainer').style.display = 'none';
         document.getElementById('dashboardPanel').style.display = 'flex';
+        document.getElementById('panelTitle').innerText = currentTheme.toUpperCase() + " GENERATOR ENGINE";
         
-        document.getElementById('bgMusik').src = CONFIG_UTAMA.link_lagu_background_panel;
-        document.getElementById('bgMusik').play().then(() => { statusMusik = true; }).catch(() => {});
-        
+        if(currentTheme !== 'kenangan') {
+            document.getElementById('actionGridGroup').style.display = 'none';
+        } else {
+            document.getElementById('actionGridGroup').style.display = 'flex';
+        }
+
+        if(CONFIG_UTAMA[currentTheme] && CONFIG_UTAMA[currentTheme].music) {
+            const audioTarget = document.getElementById('bgMusik');
+            const btn = document.getElementById('btnMusik');
+            audioTarget.src = CONFIG_UTAMA[currentTheme].music;
+            audioTarget.load();
+            audioTarget.play().then(() => {
+                statusMusik = true;
+                btn.innerText = "🎵";
+            }).catch(() => {
+                statusMusik = false;
+                btn.innerText = "🔇";
+            });
+        }
         muatGaleriAwal();
     }
 
     function toggleMusik() {
         const lagu = document.getElementById('bgMusik');
         const btn = document.getElementById('btnMusik');
-        if (statusMusik) {
-            lagu.pause();
+        if (!lagu.src || lagu.src === "") return;
+        
+        if (statusMusik) { 
+            lagu.pause(); 
             btn.innerText = "🔇";
-            statusMusik = false;
-        } else {
-            lagu.play();
-            btn.innerText = "🎵";
-            statusMusik = true;
+            statusMusik = false; 
+        } else { 
+            lagu.play().then(() => { 
+                btn.innerText = "🎵";
+                statusMusik = true; 
+            }).catch(() => {
+                lagu.load();
+                lagu.play().then(() => { 
+                    btn.innerText = "🎵";
+                    statusMusik = true; 
+                }).catch(() => {});
+            });
         }
     }
 
@@ -467,22 +690,21 @@
         .then(fileData => {
             if (fileData.content) {
                 databaseLengkap = JSON.parse(atob(fileData.content));
-                if (!databaseLengkap[currentWebId]) {
-                    databaseLengkap[currentWebId] = { judul: "Kenangan Utama", lagu: CONFIG_UTAMA.link_lagu_background_panel, kenangan: [] };
+                if (databaseLengkap[currentWebId] && currentTheme === 'kenangan') {
+                    renderGaleri(databaseLengkap[currentWebId].kenangan || []);
                 }
-                renderGaleri(databaseLengkap[currentWebId].kenangan || []);
             }
-        }).catch(() => {});
+        });
     }
 
-    function renderGaleri(daftarKenangan) {
+    function renderGaleri(daftar) {
         const container = document.getElementById('galleryContainer');
         container.innerHTML = '';
-        daftarKenangan.forEach(item => {
+        daftar.forEach(item => {
             const card = document.createElement('div');
             card.className = 'card-kenangan';
             card.innerHTML = `
-                <div class="card-img-box"><img src="${item.foto}" onerror="this.src='https://c.top4top.io/p_3838ghicg1.jpg'"></div>
+                <div class="card-img-box"><img src="${item.foto}"></div>
                 <div class="card-info">
                     <div class="card-nama">${item.nama}</div>
                     <div class="card-caption">"${item.caption}"</div>
@@ -495,67 +717,59 @@
     function buatWebBaru() {
         const judul = document.getElementById('webTitle').value.trim();
         const laguInput = document.getElementById('webMusic').value.trim();
+        const customBg = document.getElementById('inputCustomBg').value;
         const nama = document.getElementById('inputNama').value.trim();
-        const foto = document.getElementById('inputFoto').value.trim();
+        const foto = document.getElementById('inputFoto').value;
         const caption = document.getElementById('inputCaption').value.trim();
 
-        if (!judul || !nama || !foto) {
-            alert("King, minimal isi Judul Web, Nama Teman pertama, dan Link Foto nya dulu!");
-            return;
-        }
+        if (!judul || !nama || !foto) return alert("Lengkapi data input wajib!");
 
-        const angkaAcak = Math.floor(1000 + Math.random() * 9000);
-        const idBaru = "kenangan_FengXiu_" + angkaAcak;
-
+        const idBaru = "project_" + currentTheme + "_" + Math.floor(1000 + Math.random() * 9000);
         databaseLengkap[idBaru] = {
+            theme: currentTheme,
             judul: judul,
             lagu: laguInput,
-            kenangan: [{ nama, foto, caption: caption || "No caption." }]
+            customBg: customBg || "",
+            kenangan: [{ nama, foto, caption }]
         };
 
-        kirimKeGitHub(databaseLengkap, "Generate new unique web layout " + idBaru, () => {
-            const baseLink = window.location.origin + window.location.pathname;
-            const linkHasil = `${baseLink}?id=${idBaru}`;
+        kirimKeGitHub(databaseLengkap, "Deployment structural engine " + idBaru, () => {
+            const linkHasil = `${window.location.origin}${window.location.pathname}?id=${idBaru}`;
             const box = document.getElementById('resultLink');
             box.style.display = "block";
-            box.innerHTML = `<strong>Web Berhasil Dibuat!</strong><br><br><a href="${linkHasil}" target="_blank" style="color:#faedcd; text-decoration:underline; font-size:14px;">${linkHasil}</a>`;
-            alert("🔥 Sukses Membuat Web Kenangan Baru Unik!");
+            box.innerHTML = `<strong>Web ${currentTheme.toUpperCase()} Berhasil Online!</strong><br><br><a href="${linkHasil}" target="_blank" style="color:#fff;font-size:13px;">${linkHasil}</a>`;
+            alert("🔥 Sukses Membangun System Baru!");
         });
     }
 
     function kelolaKenangan(aksi) {
+        if(currentTheme !== 'kenangan') return;
         const nama = document.getElementById('inputNama').value.trim();
-        const foto = document.getElementById('inputFoto').value.trim();
+        const foto = document.getElementById('inputFoto').value;
         const caption = document.getElementById('inputCaption').value.trim();
 
-        if (!nama) { alert('Masukkan Nama Teman dulu, King!'); return; }
-        if (aksi === 'ADD' && !foto) { alert('Masukkan Link Foto dulu, King!'); return; }
-
-        if (!databaseLengkap[currentWebId]) {
-            databaseLengkap[currentWebId] = { judul: "Kenangan Utama", lagu: CONFIG_UTAMA.link_lagu_background_panel, kenangan: [] };
-        }
+        if (!databaseLengkap[currentWebId]) databaseLengkap[currentWebId] = { theme: 'kenangan', judul: "Kenangan", kenangan: [] };
 
         if (aksi === 'ADD') {
-            databaseLengkap[currentWebId].kenangan.push({ nama, foto, caption: caption || "No caption." });
-        } else if (aksi === 'DEL') {
-            const idx = databaseLengkap[currentWebId].kenangan.findIndex(item => item.nama.toLowerCase() === nama.toLowerCase());
-            if (idx !== -1) { databaseLengkap[currentWebId].kenangan.splice(idx, 1); } 
-            else { alert('Nama tidak ketemu!'); return; }
+            if(!foto) return alert('Pilih foto!');
+            databaseLengkap[currentWebId].kenangan.push({ nama, foto, caption });
+        } else {
+            const idx = databaseLengkap[currentWebId].kenangan.findIndex(i => i.nama.toLowerCase() === nama.toLowerCase());
+            if (idx !== -1) databaseLengkap[currentWebId].kenangan.splice(idx, 1);
         }
 
-        kirimKeGitHub(databaseLengkap, "Update unique web storage " + currentWebId, () => {
-            alert("Data Saat Ini Berhasil Diperbarui!");
+        kirimKeGitHub(databaseLengkap, "Sync grid database " + currentWebId, () => {
+            alert("Database Diperbarui!");
             renderGaleri(databaseLengkap[currentWebId].kenangan);
         });
     }
 
     function kirimKeGitHub(dataObj, pesanLog, callback) {
         const urlApi = `https://api.github.com/repos/${CONFIG_GH.username}/${CONFIG_GH.repository}/contents/data.json`;
-        
         fetch(urlApi, { headers: { 'Authorization': `token ${CONFIG_GH.token}` } })
         .then(res => res.json())
         .then(fileData => {
-            const updatePayload = {
+            const payload = {
                 message: pesanLog,
                 content: btoa(unescape(encodeURIComponent(JSON.stringify(dataObj, null, 2)))),
                 sha: fileData.sha || ''
@@ -563,12 +777,10 @@
             return fetch(urlApi, {
                 method: 'PUT',
                 headers: { 'Authorization': `token ${CONFIG_GH.token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify(updatePayload)
+                body: JSON.stringify(payload)
             });
-        })
-        .then(res => { if(res.ok) callback(); })
-        .catch(() => { alert("Gagal koneksi database."); });
+        }).then(res => { if(res.ok) callback(); });
     }
 </script>
 </body>
-  </html>
+</html>
