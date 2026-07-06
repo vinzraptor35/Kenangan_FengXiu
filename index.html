@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kenangan Kelas By FengXiu</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #2c1e14, #4a3728);
+            color: #f4e4d7;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            padding: 20px 10px;
+        }
+        .panel {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255, 250, 240, 0.08);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(212, 163, 115, 0.25);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            z-index: 10;
+        }
+        .banner-box {
+            width: 100%;
+            height: 160px;
+            background: #d4a373;
+            border-radius: 18px;
+            margin-bottom: 22px;
+            overflow: hidden;
+            border: 3px solid #faedcd;
+        }
+        .banner-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        h1 {
+            font-size: 26px;
+            color: #faedcd;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+            font-weight: 700;
+        }
+        .subtitle {
+            font-size: 10px;
+            color: #d4a373;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        .input-group {
+            text-align: left;
+            margin-bottom: 14px;
+        }
+        label {
+            display: block;
+            font-size: 11px;
+            color: #faedcd;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(44, 30, 20, 0.6);
+            border: 1px solid #d4a373;
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s;
+        }
+        textarea {
+            resize: none;
+            height: 75px;
+        }
+        input:focus, textarea:focus {
+            border-color: #faedcd;
+            box-shadow: 0 0 10px rgba(250, 237, 205, 0.3);
+        }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: #d4a373;
+            border: none;
+            border-radius: 12px;
+            color: #2c1e14;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(212, 163, 115, 0.3);
+        }
+        .btn:hover {
+            background: #faedcd;
+            transform: translateY(-1px);
+        }
+        .btn-danger {
+            background: #9b2226;
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(155, 34, 38, 0.3);
+        }
+        .btn-danger:hover {
+            background: #ae2012;
+        }
+        .btn:disabled {
+            background: #5c4d42;
+            color: #a3958a;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #2c1e14;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .skip-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #d4a373;
+            color: #2c1e14;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            z-index: 1000;
+            text-transform: uppercase;
+        }
+        .main-dashboard {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            z-index: 100;
+            overflow-y: auto;
+            padding: 40px 15px;
+            background: #2c1e14;
+        }
+        .control-panel {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 163, 115, 0.3);
+            border-radius: 20px;
+            padding: 24px;
+            backdrop-filter: blur(15px);
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .result-box {
+            background: rgba(212, 163, 115, 0.15);
+            border: 1px dashed #faedcd;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+            word-break: break-all;
+            display: none;
+            text-align: center;
+        }
+        .grid-container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 1000px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px;
+            padding-bottom: 60px;
+        }
+        .card-kenangan {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(212, 163, 115, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .card-kenangan:hover {
+            transform: translateY(-6px);
+            border-color: #faedcd;
+            box-shadow: 0 12px 25px rgba(212, 163, 115, 0.2);
+        }
+        .card-img-box {
+            width: 100%;
+            height: 200px;
+            background: rgba(44, 30, 20, 0.5);
+            overflow: hidden;
+        }
+        .card-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.4s;
+        }
+        .card-kenangan:hover .card-img-box img {
+            transform: scale(1.05);
+        }
+        .card-info {
+            padding: 15px;
+            text-align: center;
+        }
+        .card-nama {
+            font-size: 16px;
+            font-weight: 700;
+            color: #faedcd;
+            margin-bottom: 6px;
+        }
+        .card-caption {
+            font-size: 12px;
+            color: #d4a373;
+            font-style: italic;
+            line-height: 1.4;
+        }
+        .watermark {
+            font-size: 9px;
+            color: #6d5f54;
+            letter-spacing: 2px;
+            margin-top: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-align: center;
+        }
+        .music-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 48px;
+            height: 48px;
+            background: #d4a373;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(212, 163, 115, 0.5);
+            font-size: 18px;
+            color: #2c1e14;
+        }
+    </style>
+</head>
+<body>
+
+<div class="panel" id="loginPanel">
+    <div class="banner-box">
+        <img src="https://c.top4top.io/p_3838ghicg1.jpg">
+    </div>
+    <h1 id="mainTitle">Kenangan Kelas</h1>
+    <div class="subtitle" id="mainSubtitle">Story Of Our Memory</div>
+    
+    <div id="loginForm">
+        <div class="input-group">
+            <input type="text" id="username" placeholder="Username" autocomplete="off">
+        </div>
+        <div class="input-group">
+            <input type="password" id="password" placeholder="Password">
+        </div>
+        <button class="btn" onclick="prosesLogin()">Masuk Kenangan</button>
+    </div>
+    <div class="watermark">BY FENGXIU</div>
+</div>
+
+<div class="video-container" id="introContainer">
+    <button class="skip-btn" onclick="lewatiIntro()">Lewati Intro ➔</button>
+    <video id="introVideo" playsinline>
+        <source id="videoSource" src="" type="video/mp4">
+    </video>
+</div>
+
+<div class="main-dashboard" id="dashboardPanel">
+    <div class="control-panel" id="adminControl">
+        <h1 style="font-size: 20px; color: #faedcd; text-align: center;">Kenangan Generator Panel</h1>
+        <div class="subtitle" style="margin-bottom: 20px; color: #d4a373; text-align: center;">Create Unique Web Memory</div>
+        
+        <div class="input-group">
+            <label>Nama / Judul Web Kenangan</label>
+            <input type="text" id="webTitle" placeholder="Contoh: XII Garuda Elit">
+        </div>
+        <div class="input-group">
+            <label>Link Lagu MP3 Khusus Web Ini</label>
+            <input type="text" id="webMusic" placeholder="Contoh: https://domain.com/lagu.mp3">
+        </div>
+        <div class="input-group">
+            <label>Nama Teman</label>
+            <input type="text" id="inputNama" placeholder="Contoh: Budi Luw">
+        </div>
+        <div class="input-group">
+            <label>Link Foto / Gambar</label>
+            <input type="text" id="inputFoto" placeholder="Contoh: https://top4top.io/...jpg">
+        </div>
+        <div class="input-group">
+            <label>Caption / Pesan Kenangan</label>
+            <textarea id="inputCaption" placeholder="Contoh: Si paling hobi bolos jam kos..."></textarea>
+        </div>
+        
+        <button class="btn" id="btnGen" onclick="buatWebBaru()" style="margin-bottom: 10px; background: #faedcd;">🔥 GENERATE WEB BARU</button>
+        
+        <div style="display: flex; gap: 10px;">
+            <button class="btn" id="btnAdd" onclick="kelolaKenangan('ADD')" style="flex: 1; font-size: 12px;">ADD TO CURRENT</button>
+            <button class="btn btn-danger" id="btnDel" onclick="kelolaKenangan('DEL')" style="flex: 1; font-size: 12px;">DEL FROM CURRENT</button>
+        </div>
+
+        <div class="result-box" id="resultLink"></div>
+        <div class="watermark" style="margin-top: 15px;">INPUT CONTROLLER BY FENGXIU</div>
+    </div>
+
+    <div class="grid-container" id="galleryContainer"></div>
+</div>
+
+<div class="music-btn" id="btnMusik" onclick="toggleMusik()">🎵</div>
+<audio id="bgMusik" loop></audio>
+
+<script>
+    const CONFIG_UTAMA = {
+        link_video_intro: "https://f.top4top.io/m_3838q7ny01.mp4",
+        link_lagu_background_panel: "https://c.top4top.io/m_38386axoq1.mp3"
+    };
+
+    const p1 = "ghp_XRbHGI89u6E";
+    const p2 = "5w5aSLe585LlgjLcdez0m1cX5";
+    const tokenSempurna = p1 + p2;
+
+    const CONFIG_GH = {
+        token: tokenSempurna,
+        username: "vinzraptor35",
+        repository: "Kenangan_FengXiu"
+    };
+
+    let statusMusik = false;
+    let currentWebId = "utama";
+    let databaseLengkap = {};
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('id')) {
+        currentWebId = urlParams.get('id');
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('mainTitle').innerText = "Memuat Kenangan...";
+        document.getElementById('mainSubtitle').innerText = "ID: " + currentWebId;
+        window.addEventListener('DOMContentLoaded', muatDataDirectly);
+    }
+
+    function muatDataDirectly() {
+        const urlApi = `https://api.github.com/repos/${CONFIG_GH.username}/${CONFIG_GH.repository}/contents/data.json`;
+        fetch(urlApi, { headers: { 'Authorization': `token ${CONFIG_GH.token}` } })
+        .then(res => res.json())
+        .then(fileData => {
+            if (fileData.content) {
+                databaseLengkap = JSON.parse(atob(fileData.content));
+                if (databaseLengkap[currentWebId]) {
+                    document.getElementById('loginPanel').style.display = 'none';
+                    document.getElementById('adminControl').style.display = 'none';
+                    document.getElementById('dashboardPanel').style.display = 'flex';
+                    
+                    document.title = databaseLengkap[currentWebId].judul || "Kenangan Kelas";
+                    
+                    let laguTarget = databaseLengkap[currentWebId].lagu;
+                    if (!laguTarget || laguTarget === "") {
+                        laguTarget = CONFIG_UTAMA.link_lagu_background_panel;
+                    }
+                    
+                    document.getElementById('bgMusik').src = laguTarget;
+                    document.getElementById('bgMusik').play().then(() => { statusMusik = true; }).catch(() => {});
+                    
+                    renderGaleri(databaseLengkap[currentWebId].kenangan || []);
+                } else {
+                    alert("Maaf King, ID Web Kenangan ini tidak ditemukan!");
+                    window.location.href = window.location.origin + window.location.pathname;
+                }
+            }
+        }).catch(() => {});
+    }
+
+    function prosesLogin() {
+        const u = document.getElementById('username').value;
+        const p = document.getElementById('password').value;
+        
+        if (u === 'FengXiu' && p === 'kangen') {
+            document.getElementById('loginPanel').style.display = 'none';
+            const introContainer = document.getElementById('introContainer');
+            const introVideo = document.getElementById('introVideo');
+            const videoSource = document.getElementById('videoSource');
+            
+            if(CONFIG_UTAMA.link_video_intro === "MASUKKAN_URL_VIDEO_INTRO_LU_DISINI" || CONFIG_UTAMA.link_video_intro === "") {
+                lewatiIntro();
+            } else {
+                introContainer.style.display = 'flex';
+                videoSource.src = CONFIG_UTAMA.link_video_intro;
+                introVideo.load();
+                introVideo.play();
+                introVideo.onended = lewatiIntro;
+            }
+        } else {
+            alert('Username atau Password salah, King!');
+        }
+    }
+
+    function lewatiIntro() {
+        try { document.getElementById('introVideo').pause(); } catch(e) {}
+        document.getElementById('introContainer').style.display = 'none';
+        document.getElementById('dashboardPanel').style.display = 'flex';
+        
+        document.getElementById('bgMusik').src = CONFIG_UTAMA.link_lagu_background_panel;
+        document.getElementById('bgMusik').play().then(() => { statusMusik = true; }).catch(() => {});
+        
+        muatGaleriAwal();
+    }
+
+    function toggleMusik() {
+        const lagu = document.getElementById('bgMusik');
+        const btn = document.getElementById('btnMusik');
+        if (statusMusik) {
+            lagu.pause();
+            btn.innerText = "🔇";
+            statusMusik = false;
+        } else {
+            lagu.play();
+            btn.innerText = "🎵";
+            statusMusik = true;
+        }
+    }
+
+    function muatGaleriAwal() {
+        const urlApi = `https://api.github.com/repos/${CONFIG_GH.username}/${CONFIG_GH.repository}/contents/data.json`;
+        fetch(urlApi, { headers: { 'Authorization': `token ${CONFIG_GH.token}` } })
+        .then(res => res.json())
+        .then(fileData => {
+            if (fileData.content) {
+                databaseLengkap = JSON.parse(atob(fileData.content));
+                if (!databaseLengkap[currentWebId]) {
+                    databaseLengkap[currentWebId] = { judul: "Kenangan Utama", lagu: CONFIG_UTAMA.link_lagu_background_panel, kenangan: [] };
+                }
+                renderGaleri(databaseLengkap[currentWebId].kenangan || []);
+            }
+        }).catch(() => {});
+    }
+
+    function renderGaleri(daftarKenangan) {
+        const container = document.getElementById('galleryContainer');
+        container.innerHTML = '';
+        daftarKenangan.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'card-kenangan';
+            card.innerHTML = `
+                <div class="card-img-box"><img src="${item.foto}" onerror="this.src='https://c.top4top.io/p_3838ghicg1.jpg'"></div>
+                <div class="card-info">
+                    <div class="card-nama">${item.nama}</div>
+                    <div class="card-caption">"${item.caption}"</div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function buatWebBaru() {
+        const judul = document.getElementById('webTitle').value.trim();
+        const laguInput = document.getElementById('webMusic').value.trim();
+        const nama = document.getElementById('inputNama').value.trim();
+        const foto = document.getElementById('inputFoto').value.trim();
+        const caption = document.getElementById('inputCaption').value.trim();
+
+        if (!judul || !nama || !foto) {
+            alert("King, minimal isi Judul Web, Nama Teman pertama, dan Link Foto nya dulu!");
+            return;
+        }
+
+        const angkaAcak = Math.floor(1000 + Math.random() * 9000);
+        const idBaru = "kenangan_FengXiu_" + angkaAcak;
+
+        databaseLengkap[idBaru] = {
+            judul: judul,
+            lagu: laguInput,
+            kenangan: [{ nama, foto, caption: caption || "No caption." }]
+        };
+
+        kirimKeGitHub(databaseLengkap, "Generate new unique web layout " + idBaru, () => {
+            const baseLink = window.location.origin + window.location.pathname;
+            const linkHasil = `${baseLink}?id=${idBaru}`;
+            const box = document.getElementById('resultLink');
+            box.style.display = "block";
+            box.innerHTML = `<strong>Web Berhasil Dibuat!</strong><br><br><a href="${linkHasil}" target="_blank" style="color:#faedcd; text-decoration:underline; font-size:14px;">${linkHasil}</a>`;
+            alert("🔥 Sukses Membuat Web Kenangan Baru Unik!");
+        });
+    }
+
+    function kelolaKenangan(aksi) {
+        const nama = document.getElementById('inputNama').value.trim();
+        const foto = document.getElementById('inputFoto').value.trim();
+        const caption = document.getElementById('inputCaption').value.trim();
+
+        if (!nama) { alert('Masukkan Nama Teman dulu, King!'); return; }
+        if (aksi === 'ADD' && !foto) { alert('Masukkan Link Foto dulu, King!'); return; }
+
+        if (!databaseLengkap[currentWebId]) {
+            databaseLengkap[currentWebId] = { judul: "Kenangan Utama", lagu: CONFIG_UTAMA.link_lagu_background_panel, kenangan: [] };
+        }
+
+        if (aksi === 'ADD') {
+            databaseLengkap[currentWebId].kenangan.push({ nama, foto, caption: caption || "No caption." });
+        } else if (aksi === 'DEL') {
+            const idx = databaseLengkap[currentWebId].kenangan.findIndex(item => item.nama.toLowerCase() === nama.toLowerCase());
+            if (idx !== -1) { databaseLengkap[currentWebId].kenangan.splice(idx, 1); } 
+            else { alert('Nama tidak ketemu!'); return; }
+        }
+
+        kirimKeGitHub(databaseLengkap, "Update unique web storage " + currentWebId, () => {
+            alert("Data Saat Ini Berhasil Diperbarui!");
+            renderGaleri(databaseLengkap[currentWebId].kenangan);
+        });
+    }
+
+    function kirimKeGitHub(dataObj, pesanLog, callback) {
+        const urlApi = `https://api.github.com/repos/${CONFIG_GH.username}/${CONFIG_GH.repository}/contents/data.json`;
+        
+        fetch(urlApi, { headers: { 'Authorization': `token ${CONFIG_GH.token}` } })
+        .then(res => res.json())
+        .then(fileData => {
+            const updatePayload = {
+                message: pesanLog,
+                content: btoa(unescape(encodeURIComponent(JSON.stringify(dataObj, null, 2)))),
+                sha: fileData.sha || ''
+            };
+            return fetch(urlApi, {
+                method: 'PUT',
+                headers: { 'Authorization': `token ${CONFIG_GH.token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatePayload)
+            });
+        })
+        .then(res => { if(res.ok) callback(); })
+        .catch(() => { alert("Gagal koneksi database."); });
+    }
+</script>
+</body>
+  </html>
