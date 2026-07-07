@@ -422,8 +422,13 @@
     function gantiTemaAwal(tema) {
         currentTheme = tema;
         document.body.className = "theme-" + tema;
-        document.body.style.background = "";
+        document.body.style.backgroundImage = "";
         
+        document.getElementById('inputCustomBg').value = "";
+        document.getElementById('bgUploadLabel').innerText = "🖼️ Ambil Background dari Galeri";
+        document.getElementById('inputFoto').value = "";
+        document.getElementById('uploadLabel').innerText = "📁 Ambil dari Galeri HP";
+
         const titleMap = { kenangan: "Kenangan Kelas", bucin: "Special For You", birthday: "Happy Birthday Party" };
         const subtitleMap = { kenangan: "Story Of Our Memory", bucin: "Unconditional Love Romance", birthday: "Wishing You All The Best" };
         const bannerMap = { kenangan: CONFIG_UTAMA.kenangan.bg, bucin: CONFIG_UTAMA.bucin.bg, birthday: CONFIG_UTAMA.birthday.bg };
@@ -482,8 +487,9 @@
         fetch("https://api.imgbb.com/1/upload", { method: "POST", body: formData })
         .then(res => res.json())
         .then(response => {
-            if (response.success && response.data && response.data.url) {
-                hiddenInput.value = response.data.url;
+            if (response.success && response.data) {
+                const hasilUrl = response.data.url || response.data.display_url;
+                hiddenInput.value = hasilUrl;
                 label.innerText = "✅ Berhasil Diubah Menjadi URL Sistem!";
             } else {
                 label.innerText = "❌ Gagal Eksekusi File.";
@@ -504,8 +510,10 @@
                     currentTheme = dataWeb.theme || "kenangan";
                     document.body.className = "theme-" + currentTheme;
                     
-                    if(dataWeb.customBg) {
-                        document.body.style.background = `url('${dataWeb.customBg}')`;
+                    if(dataWeb.customBg && dataWeb.customBg !== "") {
+                        document.body.style.backgroundImage = `url('${dataWeb.customBg}')`;
+                    } else {
+                        document.body.style.backgroundImage = "";
                     }
 
                     if(currentTheme === 'bucin' || currentTheme === 'birthday') {
