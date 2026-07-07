@@ -148,6 +148,7 @@
             font-weight: 500;
             cursor: pointer;
             text-align: center;
+            margin-bottom: 5px;
         }
 
         .btn {
@@ -256,26 +257,95 @@
 
         .bucin-display-container {
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 105;
+            padding: 10px;
         }
         .bucin-card {
             background: rgba(15, 15, 15, 0.75);
             backdrop-filter: blur(12px);
-            border-radius: 20px;
+            border-radius: 24px;
             padding: 35px 25px;
             width: 100%;
             text-align: center;
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 25px rgba(255, 105, 180, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 25px rgba(255, 105, 180, 0.2);
         }
+        body.theme-birthday .bucin-card {
+            background: #18112c;
+            border: 1px solid rgba(114, 9, 183, 0.4);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        body.theme-birthday .svg-icon {
+            fill: #7209b7;
+        }
+        
+        .hbd-title-besar {
+            font-size: 32px;
+            font-weight: 800;
+            color: #ffb703;
+            margin-bottom: 15px;
+            line-height: 1.2;
+            text-transform: none;
+        }
+
+        .hbd-foto-wrapper {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin: 20px auto;
+            width: 100%;
+            max-width: 320px;
+        }
+        .hbd-foto-wrapper.double-img {
+            grid-template-columns: 1fr 1fr;
+        }
+        .hbd-frame-foto {
+            width: 100%;
+            aspect-ratio: 1/1;
+            border-radius: 14px;
+            border: 3px solid #fff;
+            object-fit: cover;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            transform: rotate(-3deg);
+        }
+        .hbd-frame-foto:nth-child(even) {
+            transform: rotate(4deg);
+        }
+
         .foto-profil { width: 100px; height: 100px; border-radius: 50%; border: 3px solid white; object-fit: cover; margin-bottom: 20px; }
         .svg-icon { width: 80px; height: 80px; margin: 10px auto 20px auto; fill: #ffb6c1; display: block; }
         
+        #ketikTeks {
+            display: inline-block;
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            width: 100%;
+        }
+
+        .hbd-text-p {
+            font-size: 14px;
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .kesan-box-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2ec4b6;
+            margin-top: 25px;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
         .watermark { font-size: 9px; opacity: 0.4; letter-spacing: 2px; margin-top: 20px; font-weight: 700; text-transform: uppercase; text-align: center; color: #fff; }
         .music-btn { position: fixed; bottom: 25px; right: 25px; width: 48px; height: 48px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 200; cursor: pointer; font-size: 18px; color: #fff; border: 1px solid rgba(255,255,255,0.3); }
     </style>
@@ -308,6 +378,12 @@
         <button class="btn" onclick="prosesLogin()">Masuk Dashboard</button>
     </div>
     <div class="watermark">BY FENGXIU</div>
+</div>
+
+<div class="panel" id="manualPlayGate" style="display: none; position: fixed; z-index: 1000;">
+    <h1 style="font-size: 20px; margin-bottom: 15px;">Selamat Datang</h1>
+    <p style="font-size: 13px; margin-bottom: 20px; opacity: 0.8;">Klik tombol di bawah untuk membuka sistem dan memutar memori audio.</p>
+    <button class="btn" onclick="aksesMasukWebDirect()">Buka Kenangan</button>
 </div>
 
 <div class="video-container" id="introContainer">
@@ -344,9 +420,15 @@
         <div class="input-group">
             <label id="lblMedia">Upload File Media / Foto Profil</label>
             <div class="file-upload-wrapper">
-                <div class="file-upload-btn" id="uploadLabel" onclick="triggerPilihFile()">📁 Ambil dari Galeri HP</div>
-                <input type="file" id="fileFotoInput" accept="image/*" style="display: none;" onchange="handleAutoUpload(this)">
+                <div class="file-upload-btn" id="uploadLabel" onclick="triggerPilihFile(1)">📁 Foto Utama / Profil</div>
+                <input type="file" id="fileFotoInput" accept="image/*" style="display: none;" onchange="handleAutoUpload(this, 1)">
                 <input type="hidden" id="inputFoto" value="">
+                
+                <div id="hbdOptionalPhotoBox" style="display: none; margin-top: 5px;">
+                    <div class="file-upload-btn" id="uploadLabel2" onclick="triggerPilihFile(2)">📁 Foto Pendamping Ulang Tahun (Opsional)</div>
+                    <input type="file" id="fileFotoInput2" accept="image/*" style="display: none;" onchange="handleAutoUpload(this, 2)">
+                    <input type="hidden" id="inputFoto2" value="">
+                </div>
             </div>
         </div>
 
@@ -383,11 +465,23 @@
         <button onclick="actionBucinStep2()" class="btn" id="btnColorTheme2" style="background:#ff4757; color:#fff;">Buka Surat 💌</button>
     </div>
     <div class="bucin-card" id="boxStep3" style="display: none;">
-        <img class="foto-profil" id="bucinTargetImg" src="" alt="Profile">
-        <h1 id="bucinTargetHeader">For You ❤</h1>
+        <div id="wrapperLayoutBucinStyle">
+            <img class="foto-profil" id="bucinTargetImg" src="" alt="Profile">
+            <h1 id="bucinTargetHeader" style="font-size:22px; margin-bottom:10px;">For You ❤</h1>
+        </div>
+        
+        <div id="wrapperLayoutHbdStyle" style="display: none;">
+            <div class="subtitle" style="margin-bottom:5px; color:#ffb703;">Selamat Ulang Tahun</div>
+            <h1 class="hbd-title-besar" id="hbdNamaBesar">Nanda Aditya Pratama! 🎉</h1>
+            <div class="hbd-foto-wrapper" id="hbdDynamicPhotoGrid"></div>
+            <p class="hbd-text-p" id="hbdKeteranganDoaAtas"></p>
+        </div>
+
         <p><span id="ketikTeks"></span></p>
+        
         <div style="display:none; margin-top:15px;" id="areaBalas">
-            <textarea id="pesanUser" placeholder="Kirim kesan pesan balasan..."></textarea>
+            <div class="kesan-box-title" id="lblKesanKirim">Kesan & Pesan Balasan</div>
+            <textarea id="pesanUser" placeholder="tulis pesanmu wes"></textarea>
             <button onclick="kirimKeWA()" class="btn" style="background:#25d366; color:#fff; margin-top:10px;">Balas Ke WhatsApp 📩</button>
         </div>
     </div>
@@ -416,7 +510,7 @@
     if (urlParams.has('id')) {
         currentWebId = urlParams.get('id');
         document.getElementById('loginPanel').style.display = 'none';
-        muatDataDirectly();
+        pramuatDataSistem();
     }
 
     function gantiTemaAwal(tema) {
@@ -427,7 +521,9 @@
         document.getElementById('inputCustomBg').value = "";
         document.getElementById('bgUploadLabel').innerText = "🖼️ Ambil Background dari Galeri";
         document.getElementById('inputFoto').value = "";
-        document.getElementById('uploadLabel').innerText = "📁 Ambil dari Galeri HP";
+        document.getElementById('inputFoto2').value = "";
+        document.getElementById('uploadLabel').innerText = "📁 Foto Utama / Profil";
+        document.getElementById('uploadLabel2').innerText = "📁 Foto Pendamping Ulang Tahun (Opsional)";
 
         const titleMap = { kenangan: "Kenangan Kelas", bucin: "Special For You", birthday: "Happy Birthday Party" };
         const subtitleMap = { kenangan: "Story Of Our Memory", bucin: "Unconditional Love Romance", birthday: "Wishing You All The Best" };
@@ -441,32 +537,40 @@
         const lblTarget = document.getElementById('lblTarget');
         const lblCaption = document.getElementById('lblCaption');
         const bgContainer = document.getElementById('bgUploadContainer');
+        const optionalPhoto = document.getElementById('hbdOptionalPhotoBox');
 
         if(tema === 'kenangan') {
             lblTitle.innerText = "Nama / Judul Web Kenangan";
             lblTarget.innerText = "Nama Teman";
             lblCaption.innerText = "Caption / Pesan Kenangan";
             bgContainer.style.display = "none";
+            optionalPhoto.style.display = "none";
         } else {
             bgContainer.style.display = "block";
             if(tema === 'bucin') {
                 lblTitle.innerText = "Judul Surat Ucapan";
                 lblTarget.innerText = "Nama Pasangan Kamu";
                 lblCaption.innerText = "Isi Pesan Panjang Sayang";
+                optionalPhoto.style.display = "none";
             } else {
                 lblTitle.innerText = "Judul Acara Ulang Tahun";
                 lblTarget.innerText = "Nama Yang Berulang Tahun";
                 lblCaption.innerText = "Harapan / Doa Panjang (Wish)";
+                optionalPhoto.style.display = "block";
             }
         }
     }
 
-    function triggerPilihFile() { document.getElementById('fileFotoInput').click(); }
+    function triggerPilihFile(index) { 
+        if(index === 1) document.getElementById('fileFotoInput').click(); 
+        if(index === 2) document.getElementById('fileFotoInput2').click(); 
+    }
     function triggerPilihBg() { document.getElementById('fileBgInput').click(); }
 
-    function handleAutoUpload(input) {
+    function handleAutoUpload(input, index) {
         if (!input.files || !input.files[0]) return;
-        unggahKeImgBB(input.files[0], 'uploadLabel', 'inputFoto');
+        if(index === 1) unggahKeImgBB(input.files[0], 'uploadLabel', 'inputFoto');
+        if(index === 2) unggahKeImgBB(input.files[0], 'uploadLabel2', 'inputFoto2');
     }
 
     function handleBgUpload(input) {
@@ -497,7 +601,7 @@
         }).catch(() => { label.innerText = "❌ Gangguan Sambungan Hosting."; });
     }
 
-    function muatDataDirectly() {
+    function pramuatDataSistem() {
         const urlApi = `https://api.github.com/repos/${CONFIG_GH.username}/${CONFIG_GH.repository}/contents/data.json`;
         fetch(urlApi, { headers: { 'Authorization': `token ${CONFIG_GH.token}` } })
         .then(res => res.json())
@@ -506,60 +610,70 @@
                 databaseLengkap = JSON.parse(atob(fileData.content));
                 const dataWeb = databaseLengkap[currentWebId];
                 if (dataWeb) {
-                    document.getElementById('loginPanel').style.display = 'none';
                     currentTheme = dataWeb.theme || "kenangan";
-                    document.body.className = "theme-" + currentTheme;
-                    
-                    if(dataWeb.customBg && dataWeb.customBg !== "") {
-                        document.body.style.backgroundImage = `url('${dataWeb.customBg}')`;
+                    if(currentTheme === 'kenangan') {
+                        document.getElementById('manualPlayGate').style.display = 'block';
                     } else {
-                        document.body.style.backgroundImage = "";
+                        eksekusiMuatDataDirect();
                     }
-
-                    if(currentTheme === 'bucin' || currentTheme === 'birthday') {
-                        setupEfekHatiTerbang();
-                        document.getElementById('dashboardPanel').style.display = 'none';
-                        document.getElementById('bucinDisplayPanel').style.display = 'flex';
-                        targetBucinData = dataWeb;
-                        
-                        const btn1 = document.getElementById('btnColorTheme');
-                        const btn2 = document.getElementById('btnColorTheme2');
-                        if(currentTheme === 'birthday') {
-                            document.getElementById('bucinStep1Title').innerText = "Ada Kado Spesial 🎁";
-                            document.getElementById('bucinStep1Desc').innerText = "Seseorang mengirimkan sebuah kejutan virtual istimewa di hari ulang tahunmu.";
-                            if(btn1) btn1.style.background = "#7209b7";
-                            if(btn2) btn2.style.background = "#7209b7";
-                        }
-                    } else {
-                        document.getElementById('dashboardPanel').style.display = 'flex';
-                        document.getElementById('adminControl').style.display = 'none';
-                        renderGaleri(dataWeb.kenangan || []);
-                    }
-                    
-                    let laguTarget = dataWeb.lagu;
-                    if(!laguTarget || laguTarget === "") {
-                        if(CONFIG_UTAMA[currentTheme]) laguTarget = CONFIG_UTAMA[currentTheme].music;
-                    }
-
-                    if(laguTarget && laguTarget !== "") {
-                        const audioTarget = document.getElementById('bgMusik');
-                        const btn = document.getElementById('btnMusik');
-                        audioTarget.src = laguTarget;
-                        audioTarget.load();
-                        
-                        const paksaPutarGlobal = () => {
-                            audioTarget.play().then(() => {
-                                statusMusik = true;
-                                btn.innerText = "🎵";
-                                window.removeEventListener('click', paksaPutarGlobal);
-                            }).catch(() => {});
-                        };
-                        window.addEventListener('click', paksaPutarGlobal);
-                    }
-                    document.title = dataWeb.judul || "Special Page";
                 }
             }
         });
+    }
+
+    function aksesMasukWebDirect() {
+        document.getElementById('manualPlayGate').style.display = 'none';
+        eksekusiMuatDataDirect();
+    }
+
+    function eksekusiMuatDataDirect() {
+        const dataWeb = databaseLengkap[currentWebId];
+        document.getElementById('loginPanel').style.display = 'none';
+        document.body.className = "theme-" + currentTheme;
+        
+        if(dataWeb.customBg && dataWeb.customBg !== "") {
+            document.body.style.backgroundImage = `url('${dataWeb.customBg}')`;
+        } else {
+            document.body.style.backgroundImage = "";
+        }
+
+        if(currentTheme === 'bucin' || currentTheme === 'birthday') {
+            setupEfekHatiTerbang();
+            document.getElementById('dashboardPanel').style.display = 'none';
+            document.getElementById('bucinDisplayPanel').style.display = 'flex';
+            targetBucinData = dataWeb;
+            
+            const btn1 = document.getElementById('btnColorTheme');
+            const btn2 = document.getElementById('btnColorTheme2');
+            if(currentTheme === 'birthday') {
+                document.getElementById('bucinStep1Title').innerText = "Ada Kado Spesial 🎁";
+                document.getElementById('bucinStep1Desc').innerText = "Seseorang mengirimkan sebuah kejutan virtual istimewa di hari ulang tahunmu.";
+                if(btn1) btn1.style.background = "#7209b7";
+                if(btn2) btn2.style.background = "#7209b7";
+            }
+        } else {
+            document.getElementById('dashboardPanel').style.display = 'flex';
+            document.getElementById('adminControl').style.display = 'none';
+            renderGaleri(dataWeb.kenangan || []);
+        }
+        
+        let laguTarget = dataWeb.lagu;
+        if(!laguTarget || laguTarget === "") {
+            if(CONFIG_UTAMA[currentTheme]) laguTarget = CONFIG_UTAMA[currentTheme].music;
+        }
+
+        if(laguTarget && laguTarget !== "") {
+            const audioTarget = document.getElementById('bgMusik');
+            audioTarget.src = laguTarget;
+            audioTarget.load();
+            if(currentTheme === 'kenangan') {
+                audioTarget.play().then(() => {
+                    statusMusik = true;
+                    document.getElementById('btnMusik').innerText = "🎵";
+                }).catch(() => {});
+            }
+        }
+        document.title = dataWeb.judul || "Special Page";
     }
 
     function setupEfekHatiTerbang() {
@@ -585,8 +699,6 @@
         
         if(targetBucinData && targetBucinData.kenangan && targetBucinData.kenangan[0]) {
             const item = targetBucinData.kenangan[0];
-            document.getElementById('bucinTargetImg').src = item.foto;
-            document.getElementById('bucinTargetHeader').innerText = (currentTheme === 'bucin' ? "For You: " : "HBD: ") + item.nama;
             
             const audioTarget = document.getElementById('bgMusik');
             const btn = document.getElementById('btnMusik');
@@ -600,6 +712,31 @@
                 });
             }
 
+            if(currentTheme === 'birthday') {
+                document.getElementById('wrapperLayoutBucinStyle').style.display = 'none';
+                document.getElementById('wrapperLayoutHbdStyle').style.display = 'block';
+                document.getElementById('hbdNamaBesar').innerText = item.nama + "! 🎉";
+                document.getElementById('lblKesanKirim').innerText = "Kesan & Pesan Buat " + item.nama.split(' ')[0];
+                
+                const gridFoto = document.getElementById('hbdDynamicPhotoGrid');
+                gridFoto.innerHTML = '';
+                
+                if(item.foto2 && item.foto2 !== "") {
+                    gridFoto.className = "hbd-foto-wrapper double-img";
+                    gridFoto.innerHTML = `<img class="hbd-frame-foto" src="${item.foto}"><img class="hbd-frame-foto" src="${item.foto2}">`;
+                } else {
+                    gridFoto.className = "hbd-foto-wrapper";
+                    gridFoto.innerHTML = `<img class="hbd-frame-foto" src="${item.foto}">`;
+                }
+                
+                document.getElementById('hbdKeteranganDoaAtas').innerText = "Barakallah fii umrik, " + item.nama.split(' ')[0] + "! 🎂";
+            } else {
+                document.getElementById('wrapperLayoutBucinStyle').style.display = 'block';
+                document.getElementById('wrapperLayoutHbdStyle').style.display = 'none';
+                document.getElementById('bucinTargetImg').src = item.foto;
+                document.getElementById('bucinTargetHeader').innerText = "For You ❤";
+            }
+            
             new Typed('#ketikTeks', {
                 strings: [item.caption],
                 typeSpeed: 50,
@@ -613,7 +750,8 @@
     function kirimKeWA() {
         const msg = document.getElementById('pesanUser').value.trim();
         if(!msg) return alert('Tulis reaksimu dulu!');
-        const formatSms = `Halo! Terima kasih ucapan web ${currentTheme.toUpperCase()}-nya.\n\nIni balasan dariku:\n"${msg}"`;
+        const targetNama = targetBucinData && targetBucinData.kenangan[0] ? targetBucinData.kenangan[0].nama : "Kamu";
+        const formatSms = `Halo! Terima kasih ucapan web ${currentTheme.toUpperCase()}-nya.\n\nIni balasan dariku buat mu:\n"${msg}"`;
         window.location.href = "https://wa.me/6285242556628?text=" + encodeURIComponent(formatSms);
     }
 
@@ -728,6 +866,7 @@
         const customBg = document.getElementById('inputCustomBg').value;
         const nama = document.getElementById('inputNama').value.trim();
         const foto = document.getElementById('inputFoto').value;
+        const foto2 = document.getElementById('inputFoto2').value;
         const caption = document.getElementById('inputCaption').value.trim();
 
         if (!judul || !nama || !foto) return alert("Lengkapi data input wajib!");
@@ -738,7 +877,7 @@
             judul: judul,
             lagu: laguInput,
             customBg: customBg || "",
-            kenangan: [{ nama, foto, caption }]
+            kenangan: [{ nama, foto, foto2: foto2 || "", caption }]
         };
 
         kirimKeGitHub(databaseLengkap, "Deployment structural engine " + idBaru, () => {
