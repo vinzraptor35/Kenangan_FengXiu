@@ -466,35 +466,76 @@
 
     function handleAutoUpload(input) {
         if (!input.files || !input.files[0]) return;
-        unggahKeImgBB(input.files[0], 'uploadLabel', 'inputFoto');
+        unggahMediaMultiHost(input.files[0], 'uploadLabel', 'inputFoto');
     }
 
     function handleBgUpload(input) {
         if (!input.files || !input.files[0]) return;
-        unggahKeImgBB(input.files[0], 'bgUploadLabel', 'inputCustomBg');
+        unggahMediaMultiHost(input.files[0], 'bgUploadLabel', 'inputCustomBg');
     }
 
-    function unggahKeImgBB(file, idLabel, idHiddenInput) {
+    function unggahMediaMultiHost(file, idLabel, idHiddenInput) {
         const label = document.getElementById(idLabel);
         const hiddenInput = document.getElementById(idHiddenInput);
         
-        label.innerText = "⏳ Memproses Transformasi File Gambar...";
+        label.innerText = "⏳ Menghubungi Server Catbox...";
         
-        const formData = new FormData();
-        formData.append("key", "516da28898e91048c8ea720cf0d92317");
-        formData.append("image", file);
+        const formDataCatbox = new FormData();
+        formDataCatbox.append("reqtype", "fileupload");
+        formDataCatbox.append("fileToUpload", file);
         
-        fetch("https://api.imgbb.com/1/upload", { method: "POST", body: formData })
-        .then(res => res.json())
-        .then(response => {
-            if (response.success && response.data) {
-                const hasilUrl = response.data.url || response.data.display_url;
-                hiddenInput.value = hasilUrl;
-                label.innerText = "✅ Berhasil Diubah Menjadi URL Sistem!";
+        fetch("https://catbox.moe/user/api.php", { method: "POST", body: formDataCatbox })
+        .then(res => res.text())
+        .then(responseText => {
+            if (responseText && responseText.startsWith("https://")) {
+                hiddenInput.value = responseText.trim();
+                label.innerText = "✅ Berhasil Diubah via Catbox!";
             } else {
-                label.innerText = "❌ Gagal Eksekusi File.";
+                throw new Error("Catbox Bermasalah");
             }
-        }).catch(() => { label.innerText = "❌ Gangguan Sambungan Hosting."; });
+        })
+        .catch(() => {
+            label.innerText = "⚠️ Catbox Mokad! Mengalihkan ke Top4Top...";
+            
+            const formDataTop4Top = new FormData();
+            formDataTop4Top.append("file_0_", file);
+            formDataTop4Top.append("submit", "true");
+            
+            fetch("https://top4top.io/index.php", { method: "POST", body: formDataTop4Top })
+            .then(res => res.text())
+            .then(htmlText => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlText, 'text/html');
+                const textareas = doc.querySelectorAll('textarea');
+                
+                let linkGambar = "";
+                textareas.forEach(ta => {
+                    if (ta.value.includes('[img]') && ta.value.includes('top4top.io')) {
+                        const match = ta.value.match(/\[img\](https?:\/\/[^\[]+)\[\/img\]/);
+                        if (match && match[1]) linkGambar = match[1].trim();
+                    }
+                });
+                
+                if (!linkGambar) {
+                    const inputs = doc.querySelectorAll('input[type="text"]');
+                    inputs.forEach(inp => {
+                        if (inp.value.startsWith('https://') && inp.value.includes('top4top.io')) {
+                            linkGambar = inp.value.trim();
+                        }
+                    });
+                }
+                
+                if (linkGambar) {
+                    hiddenInput.value = linkGambar;
+                    label.innerText = "✅ Berhasil Diubah via Top4Top!";
+                } else {
+                    label.innerText = "❌ Semua Server Fail (Catbox & Top4Top).";
+                }
+            })
+            .catch(() => {
+                label.innerText = "❌ Gangguan Total Koneksi Hosting.";
+            });
+        });
     }
 
     function muatDataDirectly() {
