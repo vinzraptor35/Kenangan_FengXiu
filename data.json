@@ -8,5 +8,19 @@
       "duration": "4:58",
       "mp3": "https://cdn.aceimg.com/E8CVD1u5n.mp3"
     }
+  },
+  "project_birthday_7282": {
+    "theme": "birthday",
+    "judul": "Semangat",
+    "lagu": "",
+    "customBg": "https://i.ibb.co/JWCjMbn9/1002104786.jpg",
+    "kenangan": [
+      {
+        "nama": "Caca",
+        "foto": "https://i.ibb.co/dwdXWMPV/1002104755.jpg",
+        "foto2": "https://i.ibb.co/tpLSVN85/1002092942.jpg",
+        "caption": "Aku sayang banget sama kamu love you sayang"
+      }
+    ]
   }
 }
