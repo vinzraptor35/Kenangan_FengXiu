@@ -33,5 +33,19 @@
         "caption": "Walaupun kita udah jadi mantan tapi aku bakal tetap inget kamu sebagai wanita yang pernah aku"
       }
     ]
+  },
+  "project_kenangan_2029": {
+    "theme": "kenangan",
+    "judul": "Mantan tersayang",
+    "lagu": "",
+    "customBg": "",
+    "kenangan": [
+      {
+        "nama": "Syafriah",
+        "foto": "https://i.ibb.co/k2tczd07/Screenshot-2026-06-29-12-24-36-16.jpg",
+        "foto2": "",
+        "caption": "Walaupun kita udah jadi mantan tapi aku bakal tetap inget kamu sebagai wanita yang pernah aku"
+      }
+    ]
   }
 }
