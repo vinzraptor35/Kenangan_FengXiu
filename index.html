@@ -439,10 +439,9 @@
 
         <div id="webToApkSpecialFields" style="display: none;">
             <div class="input-group">
-                <label>Kolom 1: Icon Aplikasi / profil</label>
-                <div class="file-upload-btn" id="lblIconApkStatus" onclick="triggerPilihIconApkLocal()">🖼️ Pilih Gambar Icon/profil apk</div>
+                <label>Kolom 1: Icon Aplikasi / Profil</label>
+                <div class="file-upload-btn" id="lblIconApkStatus" onclick="triggerPilihIconApkLocal()">🖼️ Pilih Gambar Icon Dari Galeri</div>
                 <input type="file" id="fileIconApkInput" accept="image/*" style="display: none;" onchange="handleUploadIconApkToImgBB(this)">
-                <input type="hidden" id="finalApkIconUrl" value="">
             </div>
             <div class="input-group">
                 <label>Kolom 2: URL Web Yang Mau Di Jadiin APK</label>
@@ -539,7 +538,7 @@
         kenangan: { bg: "https://c.top4top.io/p_3838ghicg1.jpg", video: "https://f.top4top.io/m_3838q7ny01.mp4", music: "https://c.top4top.io/m_38386axoq1.mp3" },
         bucin: { bg: "https://k.top4top.io/p_3839kwmx91.jpg", video: "https://a.top4top.io/m_3839eyrdl1.mp4", music: "https://b.top4top.io/m_3839s6e461.mp3" },
         birthday: { bg: "https://c.top4top.io/p_3839b69co1.jpg", video: "https://k.top4top.io/m_3839ytt6a1.mp4", music: "https://e.top4top.io/m_383991rwl1.mp3" },
-        web2apk: { bg: "https://h.top4top.io/p_3841m87k80.jpg", video: "https://d.top4top.io/m_3841d43tx1.mp4", music: "" }
+        web2apk: { bg: "", video: "https://f.top4top.io/m_3838q7ny01.mp4", music: "" }
     };
 
     const tokenSempurna = "ghp_Cu0mdkUW0Oe" + "dbcLnW0fhJkNXXAOPsK0j8MEh";
@@ -575,7 +574,7 @@
 
         const titleMap = { kenangan: "Kenangan Kelas", bucin: "Special For You", birthday: "Happy Birthday Party", web2apk: "Web To APK Generator" };
         const subtitleMap = { kenangan: "Story Of Our Memory", bucin: "Unconditional Love Romance", birthday: "Wishing You All The Best", web2apk: "System Conversion Cloud Studio" };
-        const bannerMap = { kenangan: CONFIG_UTAMA.kenangan.bg, bucin: CONFIG_UTAMA.bucin.bg, birthday: CONFIG_UTAMA.birthday.bg, web2apk: "https://h.top4top.io/p_3841m87k80.jpg" };
+        const bannerMap = { kenangan: CONFIG_UTAMA.kenangan.bg, bucin: CONFIG_UTAMA.bucin.bg, birthday: CONFIG_UTAMA.birthday.bg, web2apk: "https://c.top4top.io/p_3838ghicg1.jpg" };
 
         document.getElementById('mainTitle').innerText = titleMap[tema];
         document.getElementById('mainSubtitle').innerText = subtitleMap[tema];
@@ -589,6 +588,12 @@
     function triggerPilihBg() { document.getElementById('fileBgInput').click(); }
     function triggerPilihIconApkLocal() { document.getElementById('fileIconApkInput').click(); }
 
+    function handleUploadIconApkToImgBB(input) {
+        if (!input.files || !input.files[0]) return;
+        const labelStatus = document.getElementById('lblIconApkStatus');
+        labelStatus.innerText = "✅ Icon Berhasil Dimuat (Siap Compile)!";
+    }
+
     function handleAutoUpload(input, index) {
         if (!input.files || !input.files[0]) return;
         if(index === 1) unggahKeImgBB(input.files[0], 'uploadLabel', 'inputFoto');
@@ -598,28 +603,6 @@
     function handleBgUpload(input) {
         if (!input.files || !input.files[0]) return;
         unggahKeImgBB(input.files[0], 'bgUploadLabel', 'inputCustomBg');
-    }
-
-    function handleUploadIconApkToImgBB(input) {
-        if (!input.files || !input.files[0]) return;
-        const labelStatus = document.getElementById('lblIconApkStatus');
-        labelStatus.innerText = "⏳ Memproses Upload Icon ke ImgBB...";
-        
-        const formData = new FormData();
-        formData.append("key", "51c21a59c45278a66450efe1677c021e");
-        formData.append("image", input.files[0]);
-        
-        fetch("https://api.imgbb.com/1/upload", { method: "POST", body: formData })
-        .then(res => res.json())
-        .then(response => {
-            if (response.success && response.data) {
-                const hasilUrl = response.data.image.url || response.data.display_url;
-                document.getElementById('finalApkIconUrl').value = hasilUrl;
-                labelStatus.innerText = "✅ Icon Berhasil Di-hosting!";
-            } else {
-                labelStatus.innerText = "❌ Transformasi Gambar Gagal.";
-            }
-        }).catch(() => { labelStatus.innerText = "❌ Gangguan Sambungan Hosting."; });
     }
 
     function unggahKeImgBB(file, idLabel, idHiddenInput) {
@@ -989,64 +972,64 @@
     }
 
     function eksekusiCompilerWebToApk() {
-    const inputPass = document.getElementById('apkSecurityPasswordInput').value;
-    const boxHasil = document.getElementById('resultLink');
-    
-    if (inputPass !== currentSystemPassword) {
-        alert("Akses Ditolak! Password Salah.");
-        return;
-    }
+        const inputPass = document.getElementById('apkSecurityPasswordInput').value;
+        const boxHasil = document.getElementById('resultLink');
+        
+        if (inputPass !== currentSystemPassword) {
+            alert("Akses Ditolak! Password Salah.");
+            return;
+        }
 
-    const iconUrl = document.getElementById('finalApkIconUrl').value;
-    const webUrl = document.getElementById('apkTargetWebUrl').value.trim();
-    const appName = document.getElementById('apkRealAppName').value.trim();
-    let vName = document.getElementById('apkRealVersionName').value.trim();
-    let vCode = document.getElementById('apkRealVersionCode').value.trim();
+        const fileInput = document.getElementById('fileIconApkInput');
+        const webUrl = document.getElementById('apkTargetWebUrl').value.trim();
+        const appName = document.getElementById('apkRealAppName').value.trim();
+        let vName = document.getElementById('apkRealVersionName').value.trim();
+        let vCode = document.getElementById('apkRealVersionCode').value.trim();
 
-    if (!iconUrl) return alert("Upload file gambar icon dulu!");
-    if (!webUrl) return alert("URL Website target masih kosong!");
-    if (!appName) return alert("Nama Aplikasi wajib diisi!");
+        if (!fileInput.files || !fileInput.files[0]) return alert("Silakan pilih file gambar icon terlebih dahulu!");
+        if (!webUrl) return alert("URL Website target masih kosong!");
+        if (!appName) return alert("Nama Aplikasi wajib diisi!");
 
-    if (!vName) vName = "1.0.0";
-    if (!vCode) vCode = "1";
+        if (!vName) vName = "";
+        if (!vCode) vCode = "";
 
-    boxHasil.style.display = "block";
-    boxHasil.style.borderColor = "#6366f1";
-    boxHasil.style.color = "#a5b4fc";
-    boxHasil.innerHTML = "⏳ Menghubungi Cloud Compiler Server...";
+        boxHasil.style.display = "block";
+        boxHasil.style.borderColor = "#6366f1";
+        boxHasil.style.color = "#a5b4fc";
+        boxHasil.innerHTML = "⏳ Menghubungi Cloud Compiler Server...";
 
-    const urlApi = "https://api.kyzzz.eu.cc/api/tools/web2apk?apikey=kyzz828094187322" + 
-                   "&url=" + encodeURIComponent(webUrl) + 
-                   "&app_name=" + encodeURIComponent(appName) + 
-                   "&icon=" + encodeURIComponent(iconUrl) + 
-                   "&version_name=" + encodeURIComponent(vName) + 
-                   "&version_code= " + encodeURIComponent(vCode);
+        const sendData = new FormData();
+        sendData.append("icon", fileInput.files[0]);
+        sendData.append("url", webUrl);
+        sendData.append("app_name", appName);
+        sendData.append("version_name", vName);
+        sendData.append("version_code", vCode);
 
-    fetch(urlApi, {
-        method: "GET",
-        mode: "cors"
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.status && data.result && data.result.downloadUrl) {
-            boxHasil.style.borderColor = "#10b981";
-            boxHasil.style.color = "#34d399";
-            boxHasil.innerHTML = "<strong>🔥 PROSES COMPILE SELESAI SUKSES!</strong><br>" +
-                                  "Nama: " + data.result.appName + "<br>" +
-                                  "Package: " + data.result.packageName + "<br>" +
-                                  "<a href='" + data.result.downloadUrl + "' target='_blank' style='color:#60a5fa; font-weight:600; text-decoration:none;'>📥 DOWNLOAD FILE APK DI SINI</a>";
-        } else {
+        fetch("https://api.kyzzz.eu.cc/api/tools/web2apk?apikey=kyzz828094187322", {
+            method: "POST",
+            body: sendData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status && data.result && data.result.downloadUrl) {
+                boxHasil.style.borderColor = "#10b981";
+                boxHasil.style.color = "#34d399";
+                boxHasil.innerHTML = "<strong>🔥 PROSES COMPILE SELESAI SUKSES!</strong><br>" +
+                                      "Nama: " + data.result.appName + "<br>" +
+                                      "Package: " + data.result.packageName + "<br>" +
+                                      "<a href='" + data.result.downloadUrl + "' target='_blank' style='color:#60a5fa; font-weight:600; text-decoration:none;'>📥 DOWNLOAD FILE APK DI SINI</a>";
+            } else {
+                boxHasil.style.borderColor = "#f43f5e";
+                boxHasil.style.color = "#f43f5e";
+                boxHasil.innerText = "❌ Gagal mengompilasi. Response internal API error.";
+            }
+        })
+        .catch(() => {
             boxHasil.style.borderColor = "#f43f5e";
             boxHasil.style.color = "#f43f5e";
-            boxHasil.innerText = "❌ Gagal mengompilasi. Pasangan parameter atau API error.";
-        }
-    })
-    .catch(() => {
-        boxHasil.style.borderColor = "#f43f5e";
-        boxHasil.style.color = "#f43f5e";
-        boxHasil.innerText = "❌ Gangguan jaringan atau diblokir kebijakan CORS API.";
-    });
-}
+            boxHasil.innerText = "❌ Gangguan jaringan atau restriksi CORS sistem.";
+        });
+    }
 
     function ubahPasswordSistemDinamis() {
         const secretInput = document.getElementById('devKeyVerify').value;
