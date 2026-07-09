@@ -11,8 +11,8 @@ export default function handler(req, res) {
 
     const cleanName = namaWeb.toLowerCase().replace(/[^a-z0-9-]/g, '-');
     
-    const tokenPart1 = "vcp_0oo5TzBYsf3yZB7n7ji57BfPbs";
-    const tokenPart2 = "WOYvjVxmVWN03pFqQqSP";
+    const tokenPart1 = "vcp_0oo5TzBYsf3yZB7n7ji57BfPbsWOY";
+    const tokenPart2 = "vjVxmVWN03pFqQqSPg4Xp3HENm4";
     const tokenVercel = tokenPart1 + tokenPart2;
 
     const payload = {
