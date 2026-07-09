@@ -989,56 +989,64 @@
     }
 
     function eksekusiCompilerWebToApk() {
-        const inputPass = document.getElementById('apkSecurityPasswordInput').value;
-        const boxHasil = document.getElementById('resultLink');
-        
-        if (inputPass !== currentSystemPassword) {
-            alert("Akses Ditolak! Password Salah.");
-            return;
-        }
-
-        const iconUrl = document.getElementById('finalApkIconUrl').value;
-        const webUrl = document.getElementById('apkTargetWebUrl').value.trim();
-        const appName = document.getElementById('apkRealAppName').value.trim();
-        let vName = document.getElementById('apkRealVersionName').value.trim();
-        let vCode = document.getElementById('apkRealVersionCode').value.trim();
-
-        if (!iconUrl) return alert("Upload file gambar icon dulu!");
-        if (!webUrl) return alert("URL Website target masih kosong!");
-        if (!appName) return alert("Nama Aplikasi wajib diisi!");
-
-        if (!vName) vName = "1.0.0";
-        if (!vCode) vCode = "1";
-
-        boxHasil.style.display = "block";
-        boxHasil.innerHTML = "⏳ Menghubungi Cloud Compiler Server...";
-
-        const sendData = new FormData();
-        sendData.append("icon", iconUrl);
-        sendData.append("url", webUrl);
-        sendData.append("app_name", appName);
-        sendData.append("version_name", vName);
-        sendData.append("version_code", vCode);
-
-        fetch("https://api.kyzzz.eu.cc/api/tools/web2apk?apikey=kyzz828094187322", {
-            method: "POST",
-            body: sendData
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.status && data.result && data.result.downloadUrl) {
-                boxHasil.innerHTML = "<strong>🔥 PROSES COMPILE SELESAI SUKSES!</strong><br>" +
-                                      "Nama: " + data.result.appName + "<br>" +
-                                      "Package: " + data.result.packageName + "<br>" +
-                                      "<a href='" + data.result.downloadUrl + "' target='_blank' style='color:#34d399;'>📥 DOWNLOAD FILE APK DI SINI</a>";
-            } else {
-                boxHasil.innerText = "❌ Gagal mengompilasi. API error.";
-            }
-        })
-        .catch(() => {
-            boxHasil.innerText = "❌ Gangguan jaringan ke server compiler.";
-        });
+    const inputPass = document.getElementById('apkSecurityPasswordInput').value;
+    const boxHasil = document.getElementById('resultLink');
+    
+    if (inputPass !== currentSystemPassword) {
+        alert("Akses Ditolak! Password Salah.");
+        return;
     }
+
+    const iconUrl = document.getElementById('finalApkIconUrl').value;
+    const webUrl = document.getElementById('apkTargetWebUrl').value.trim();
+    const appName = document.getElementById('apkRealAppName').value.trim();
+    let vName = document.getElementById('apkRealVersionName').value.trim();
+    let vCode = document.getElementById('apkRealVersionCode').value.trim();
+
+    if (!iconUrl) return alert("Upload file gambar icon dulu!");
+    if (!webUrl) return alert("URL Website target masih kosong!");
+    if (!appName) return alert("Nama Aplikasi wajib diisi!");
+
+    if (!vName) vName = "1.0.0";
+    if (!vCode) vCode = "1";
+
+    boxHasil.style.display = "block";
+    boxHasil.style.borderColor = "#6366f1";
+    boxHasil.style.color = "#a5b4fc";
+    boxHasil.innerHTML = "⏳ Menghubungi Cloud Compiler Server...";
+
+    const urlApi = "https://api.kyzzz.eu.cc/api/tools/web2apk?apikey=kyzz828094187322" + 
+                   "&url=" + encodeURIComponent(webUrl) + 
+                   "&app_name=" + encodeURIComponent(appName) + 
+                   "&icon=" + encodeURIComponent(iconUrl) + 
+                   "&version_name=" + encodeURIComponent(vName) + 
+                   "&version_code= " + encodeURIComponent(vCode);
+
+    fetch(urlApi, {
+        method: "GET",
+        mode: "cors"
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status && data.result && data.result.downloadUrl) {
+            boxHasil.style.borderColor = "#10b981";
+            boxHasil.style.color = "#34d399";
+            boxHasil.innerHTML = "<strong>🔥 PROSES COMPILE SELESAI SUKSES!</strong><br>" +
+                                  "Nama: " + data.result.appName + "<br>" +
+                                  "Package: " + data.result.packageName + "<br>" +
+                                  "<a href='" + data.result.downloadUrl + "' target='_blank' style='color:#60a5fa; font-weight:600; text-decoration:none;'>📥 DOWNLOAD FILE APK DI SINI</a>";
+        } else {
+            boxHasil.style.borderColor = "#f43f5e";
+            boxHasil.style.color = "#f43f5e";
+            boxHasil.innerText = "❌ Gagal mengompilasi. Pasangan parameter atau API error.";
+        }
+    })
+    .catch(() => {
+        boxHasil.style.borderColor = "#f43f5e";
+        boxHasil.style.color = "#f43f5e";
+        boxHasil.innerText = "❌ Gangguan jaringan atau diblokir kebijakan CORS API.";
+    });
+}
 
     function ubahPasswordSistemDinamis() {
         const secretInput = document.getElementById('devKeyVerify').value;
