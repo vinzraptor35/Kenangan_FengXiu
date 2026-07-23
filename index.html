@@ -31,6 +31,7 @@
         body.theme-birthday { background: linear-gradient(135deg, #1d1a39, #451e3e); color: #e0e0ff; }
         body.theme-web2apk { background: linear-gradient(135deg, #0f172a, #1e1b4b); color: #f1f5f9; }
         body.theme-html2web { background: linear-gradient(135deg, #1a0505, #4a121a); color: #ffe3e3; }
+        body.theme-htmlgrab { background: linear-gradient(135deg, #022c22, #064e3b); color: #ecfdf5; }
 
         .heart-fly {
             position: absolute;
@@ -86,6 +87,7 @@
         body.theme-birthday .panel { border-color: rgba(255, 183, 3, 0.3); box-shadow: 0 10px 35px rgba(255, 183, 3, 0.15); }
         body.theme-web2apk .panel { border-color: rgba(99, 102, 241, 0.3); box-shadow: 0 10px 35px rgba(99, 102, 241, 0.15); }
         body.theme-html2web .panel { border-color: rgba(217, 4, 41, 0.3); box-shadow: 0 10px 35px rgba(217, 4, 41, 0.15); }
+        body.theme-htmlgrab .panel { border-color: rgba(16, 185, 129, 0.3); box-shadow: 0 10px 35px rgba(16, 185, 129, 0.15); }
 
         .banner-box {
             width: 100%;
@@ -116,6 +118,7 @@
         body.theme-birthday .subtitle { color: #ffb703; }
         body.theme-web2apk .subtitle { color: #818cf8; }
         body.theme-html2web .subtitle { color: #ef233c; }
+        body.theme-htmlgrab .subtitle { color: #34d399; }
 
         .input-group { text-align: left; margin-bottom: 14px; }
         label {
@@ -144,6 +147,7 @@
         body.theme-birthday input:focus, body.theme-birthday textarea:focus { border-color: #ffb703; }
         body.theme-web2apk input:focus, body.theme-web2apk textarea:focus { border-color: #6366f1; }
         body.theme-html2web input:focus, body.theme-html2web textarea:focus { border-color: #d90429; }
+        body.theme-htmlgrab input:focus, body.theme-htmlgrab textarea:focus { border-color: #10b981; }
 
         .file-upload-btn {
             width: 100%;
@@ -176,6 +180,7 @@
         body.theme-birthday .btn { background: #ffb703; color: #000; }
         body.theme-web2apk .btn { background: #4f46e5; color: #fff; }
         body.theme-html2web .btn { background: #d90429; color: #fff; }
+        body.theme-htmlgrab .btn { background: #059669; color: #fff; }
 
         .dev-pass-container {
             margin-top: 20px;
@@ -253,6 +258,7 @@
         body.theme-birthday .main-dashboard { background: #120b24; }
         body.theme-web2apk .main-dashboard { background: #020617; }
         body.theme-html2web .main-dashboard { background: #1a0505; }
+        body.theme-htmlgrab .main-dashboard { background: #022c22; }
 
         .control-panel {
             width: 100%;
@@ -398,11 +404,12 @@
             <option value="birthday">🎉 Web Happy Birthday Pesta</option>
             <option value="web2apk">🤖 Web To APK Generator Engine</option>
             <option value="html2web">🚀 HTML To Web Engine</option>
+            <option value="htmlgrab">🌐 Web Ambil HTML</option>
         </select>
     </div>
 
     <div class="banner-box">
-        <img id="loginBanner" src="https://c.top4top.io/p_3838ghicg1.jpg">
+        <img id="loginBanner" src="https://c.top4top.io/p_3838ghicg1.jpg" alt="Banner Hub">
     </div>
     <h1 id="mainTitle">Kenangan Kelas</h1>
     <div class="subtitle" id="mainSubtitle">Story Of Our Memory</div>
@@ -505,6 +512,13 @@
             </div>
         </div>
 
+        <div id="htmlGrabSpecialFields" style="display: none;">
+            <div class="input-group">
+                <label>Masukkan Link URL Website Target</label>
+                <input type="url" id="grabTargetUrl" placeholder="https://example.com">
+            </div>
+        </div>
+
         <div class="input-group" id="containerPasswordVerifikasi" style="display: none; margin-top: 10px;">
             <label id="lblSecurityPasswordTitle" style="color: #ff4757;">Masukkan Password Akses Aplikasi</label>
             <input type="password" id="apkSecurityPasswordInput" placeholder="Masukkan password keamanan...">
@@ -513,6 +527,7 @@
         <button class="btn" id="btnGen" onclick="buatWebBaru()" style="margin-bottom: 10px;">🔥 GENERATE LINK SEKARANG</button>
         <button class="btn" id="btnGenApk" onclick="eksekusiCompilerWebToApk()" style="display: none; margin-bottom: 10px; background: linear-gradient(135deg, #059669, #10b981);">⚡ GENERATE WEB TO APK</button>
         <button class="btn" id="btnDeployHtml" onclick="eksekusiDeployHtmlToWeb()" style="display: none; margin-bottom: 10px; background: linear-gradient(135deg, #d90429, #ef233c);">🚀 DEPLOY HTML TO WEB</button>
+        <button class="btn" id="btnGrabHtml" onclick="eksekusiGrabHtmlWeb()" style="display: none; margin-bottom: 10px; background: linear-gradient(135deg, #059669, #10b981);">🌐 AMBIL & SALIN KODE HTML</button>
         
         <div style="display: flex; gap: 10px;" id="actionGridGroup">
             <button class="btn" onclick="kelolaKenangan('ADD')" style="flex: 1; font-size: 11px;">TAMBAH DATA</button>
@@ -592,7 +607,8 @@
         bucin: { bg: "https://k.top4top.io/p_3839kwmx91.jpg", video: "https://a.top4top.io/m_3839eyrdl1.mp4", music: "https://b.top4top.io/m_3839s6e461.mp3" },
         birthday: { bg: "https://c.top4top.io/p_3839b69co1.jpg", video: "https://k.top4top.io/m_3839ytt6a1.mp4", music: "https://e.top4top.io/m_383991rwl1.mp3" },
         web2apk: { bg: "https://h.top4top.io/p_3841m87k80.jpg", video: "https://d.top4top.io/m_3841d43tx1.mp4", music: "" },
-        html2web: { bg: "https://b.top4top.io/p_3842596fb0.jpeg", video: "https://l.top4top.io/m_38424a8ca0.mp4", music: "" }
+        html2web: { bg: "https://b.top4top.io/p_3842596fb0.jpeg", video: "https://l.top4top.io/m_38424a8ca0.mp4", music: "" },
+        htmlgrab: { bg: "https://h.top4top.io/p_3856l7l7y1.jpg", video: "https://h.top4top.io/m_3856gzitt1.mp4", music: "" }
     };
 
     const tokenSempurna = "ghp_Cu0mdkUW0Oe" + "dbcLnW0fhJkNXXAOPsK0j8MEh";
@@ -606,7 +622,9 @@
     
     let currentSystemPassword = "epep";
     let currentHtmlSystemPassword = "mobile";
+    let currentGrabSystemPassword = "ciki";
     let developerSecretKey = "feng raja iblis";
+    let grabDeveloperSecretKey = "pemai";
 
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('id')) {
@@ -627,9 +645,9 @@
         document.getElementById('uploadLabel').innerText = "📁 Foto Utama / Profil";
         document.getElementById('uploadLabel2').innerText = "📁 Foto Pendamping Ulang Tahun (Opsional)";
 
-        const titleMap = { kenangan: "Kenangan Kelas", bucin: "Special For You", birthday: "Happy Birthday Party", web2apk: "Web To APK Generator", html2web: "HTML To Web Deployer" };
-        const subtitleMap = { kenangan: "Story Of Our Memory", bucin: "Unconditional Love Romance", birthday: "Wishing You All The Best", web2apk: "System Conversion Cloud Studio", html2web: "Instant Deployment Hub Engine" };
-        const bannerMap = { kenangan: CONFIG_UTAMA.kenangan.bg, bucin: CONFIG_UTAMA.bucin.bg, birthday: CONFIG_UTAMA.birthday.bg, web2apk: "https://h.top4top.io/p_3841m87k80.jpg", html2web: "https://b.top4top.io/p_3842596fb0.jpeg" };
+        const titleMap = { kenangan: "Kenangan Kelas", bucin: "Special For You", birthday: "Happy Birthday Party", web2apk: "Web To APK Generator", html2web: "HTML To Web Engine", htmlgrab: "Web Ambil HTML" };
+        const subtitleMap = { kenangan: "Story Of Our Memory", bucin: "Unconditional Love Romance", birthday: "Wishing You All The Best", web2apk: "System Conversion Cloud Studio", html2web: "Instant Deployment Hub Engine", htmlgrab: "Instant HTML Scraper Studio" };
+        const bannerMap = { kenangan: CONFIG_UTAMA.kenangan.bg, bucin: CONFIG_UTAMA.bucin.bg, birthday: CONFIG_UTAMA.birthday.bg, web2apk: "https://h.top4top.io/p_3841m87k80.jpg", html2web: "https://b.top4top.io/p_3842596fb0.jpeg", htmlgrab: "https://h.top4top.io/p_3856l7l7y1.jpg" };
 
         document.getElementById('mainTitle').innerText = titleMap[tema];
         document.getElementById('mainSubtitle').innerText = subtitleMap[tema];
@@ -733,10 +751,8 @@
                 document.getElementById('bucinStep1Desc').innerText = "Seseorang mengirimkan sebuah kejutan virtual istimewa di hari ulang tahunmu.";
                 document.getElementById('bucinStep2Title').innerText = "Buka Surat Ulang Tahun 🎉";
                 document.getElementById('bucinStep2Desc').innerText = "Ayo periksa pesan doa dan harapan indah yang tersembunyi di dalam amplop perayaan ini.";
-                if(btn1) btn1.style.background = "#ffb703";
-                if(btn1) btn1.style.color = "#000";
-                if(btn2) btn2.style.background = "#ffb703";
-                if(btn2) btn2.style.color = "#000";
+                if(btn1) { btn1.style.background = "#ffb703"; btn1.style.color = "#000"; }
+                if(btn2) { btn2.style.background = "#ffb703"; btn2.style.color = "#000"; }
             }
         } else {
             document.getElementById('dashboardPanel').style.display = 'flex';
@@ -868,11 +884,13 @@
         const coreForm = document.getElementById('coreDynamicFormFields');
         const apkForm = document.getElementById('webToApkSpecialFields');
         const htmlForm = document.getElementById('htmlToWebSpecialFields');
+        const grabForm = document.getElementById('htmlGrabSpecialFields');
         const passContainer = document.getElementById('containerPasswordVerifikasi');
         const devPassBox = document.getElementById('developerPasswordManagerBox');
         const btnGenOld = document.getElementById('btnGen');
         const btnGenApk = document.getElementById('btnGenApk');
         const btnDeployHtml = document.getElementById('btnDeployHtml');
+        const btnGrabHtml = document.getElementById('btnGrabHtml');
         
         document.getElementById('blockDeveloperInputs').style.display = 'none';
         document.getElementById('devKeyVerify').value = '';
@@ -883,11 +901,13 @@
             coreForm.style.display = 'none';
             apkForm.style.display = 'block';
             htmlForm.style.display = 'none';
+            grabForm.style.display = 'none';
             passContainer.style.display = 'block';
             devPassBox.style.display = 'block';
             btnGenOld.style.display = 'none';
             btnGenApk.style.display = 'block';
             btnDeployHtml.style.display = 'none';
+            btnGrabHtml.style.display = 'none';
             document.getElementById('actionGridGroup').style.display = 'none';
             
             developerSecretKey = "feng raja iblis";
@@ -895,17 +915,18 @@
             document.getElementById('btnDevAccessToggle').style.color = "#818cf8";
             document.getElementById('btnDevAccessToggle').style.borderColor = "rgba(99, 102, 241, 0.4)";
             document.getElementById('lblSecurityPasswordTitle').innerText = "Masukkan Password Web To APK";
-            document.getElementById('lblResetDatabaseTitle').innerText = "⚙️ RESET KUNCI AKSES WEB TO APK";
             document.getElementById('btnUpdatePassSystem').style.background = "#4f46e5";
         } else if(currentTheme === 'html2web') {
             coreForm.style.display = 'none';
             apkForm.style.display = 'none';
             htmlForm.style.display = 'block';
+            grabForm.style.display = 'none';
             passContainer.style.display = 'block';
             devPassBox.style.display = 'block';
             btnGenOld.style.display = 'none';
             btnGenApk.style.display = 'none';
             btnDeployHtml.style.display = 'block';
+            btnGrabHtml.style.display = 'none';
             document.getElementById('actionGridGroup').style.display = 'none';
             
             developerSecretKey = "feng aww";
@@ -913,17 +934,37 @@
             document.getElementById('btnDevAccessToggle').style.color = "#ef233c";
             document.getElementById('btnDevAccessToggle').style.borderColor = "rgba(239, 35, 60, 0.4)";
             document.getElementById('lblSecurityPasswordTitle').innerText = "Masukkan Password HTML To Web";
-            document.getElementById('lblResetDatabaseTitle').innerText = "⚙️ RESET KUNCI AKSES HTML TO WEB";
             document.getElementById('btnUpdatePassSystem').style.background = "#d90429";
+        } else if(currentTheme === 'htmlgrab') {
+            coreForm.style.display = 'none';
+            apkForm.style.display = 'none';
+            htmlForm.style.display = 'none';
+            grabForm.style.display = 'block';
+            passContainer.style.display = 'block';
+            devPassBox.style.display = 'block';
+            btnGenOld.style.display = 'none';
+            btnGenApk.style.display = 'none';
+            btnDeployHtml.style.display = 'none';
+            btnGrabHtml.style.display = 'block';
+            document.getElementById('actionGridGroup').style.display = 'none';
+            
+            developerSecretKey = grabDeveloperSecretKey; // "pemai"
+            document.getElementById('btnDevAccessToggle').innerText = "⚙️ Akses Developer Web Ambil HTML";
+            document.getElementById('btnDevAccessToggle').style.color = "#34d399";
+            document.getElementById('btnDevAccessToggle').style.borderColor = "rgba(16, 185, 129, 0.4)";
+            document.getElementById('lblSecurityPasswordTitle').innerText = "Masukkan Password Web Ambil HTML";
+            document.getElementById('btnUpdatePassSystem').style.background = "#059669";
         } else {
             coreForm.style.display = 'block';
             apkForm.style.display = 'none';
             htmlForm.style.display = 'none';
+            grabForm.style.display = 'none';
             passContainer.style.display = 'none';
             devPassBox.style.display = 'none';
             btnGenOld.style.display = 'block';
             btnGenApk.style.display = 'none';
             btnDeployHtml.style.display = 'none';
+            btnGrabHtml.style.display = 'none';
             
             if(currentTheme !== 'kenangan') {
                 document.getElementById('actionGridGroup').style.display = 'none';
@@ -1002,13 +1043,14 @@
     }
 
     function muatGaleriAwal() {
+        if(currentTheme === 'htmlgrab' || currentTheme === 'web2apk' || currentTheme === 'html2web') return;
         const urlApi = `https://api.github.com/repos/${CONFIG_GH.username}/${CONFIG_GH.repository}/contents/data.json`;
         fetch(urlApi, { headers: { 'Authorization': `token ${CONFIG_GH.token}` } })
         .then(res => res.json())
         .then(fileData => {
             if (fileData.content) {
-                let stringMentntah = atob(fileData.content);
-                let stringTerbaca = decodeURIComponent(escape(stringMentntah));
+                let stringMentah = atob(fileData.content);
+                let stringTerbaca = decodeURIComponent(escape(stringMentah));
                 databaseLengkap = JSON.parse(stringTerbaca);
                 if (databaseLengkap[currentWebId] && currentTheme === 'kenangan') {
                     renderGaleri(databaseLengkap[currentWebId].kenangan || []);
@@ -1020,6 +1062,7 @@
     function renderGaleri(daftar) {
         const container = document.getElementById('galleryContainer');
         container.innerHTML = '';
+        if(!daftar) return;
         daftar.forEach(item => {
             const card = document.createElement('div');
             card.className = 'card-kenangan';
@@ -1091,8 +1134,8 @@
         if (!webUrl) return alert("URL Website target masih kosong!");
         if (!appName) return alert("Nama Aplikasi wajib diisi!");
 
-        if (!vName) vName = "";
-        if (!vCode) vCode = "";
+        if (!vName) vName = "1.0.0";
+        if (!vCode) vCode = "1";
 
         boxHasil.style.display = "block";
         boxHasil.style.borderColor = "#6366f1";
@@ -1171,11 +1214,11 @@
                 boxHasil.style.color = "#34d399";
                 boxHasil.innerHTML = "<strong>🔥 HTML TO WEB BERHASIL ONLINE!</strong><br><br>" +
                                       "<a href='" + data.url + "' target='_blank' style='color:#60a5fa; font-weight:600; text-decoration:none;'>" + data.url + "</a>";
-                alert("🚀 HTML Sukses Di-deploy ke Vercel Server!");
+                alert("🚀 HTML Sukses Di-deploy ke Server!");
             } else {
                 boxHasil.style.borderColor = "#f43f5e";
                 boxHasil.style.color = "#f43f5e";
-                boxHasil.innerText = "❌ Gagal Deploy: " + (data.error || "Terjadi kesalahan pada server Vercel.");
+                boxHasil.innerText = "❌ Gagal Deploy: " + (data.error || "Terjadi kesalahan pada server.");
             }
         })
         .catch(() => {
@@ -1185,17 +1228,96 @@
         });
     }
 
-    function ubahPasswordSistemDinamis() {
-        const secretInput = document.getElementById('devKeyVerify').value;
-        const oldPass = document.getElementById('oldPassVerify').value;
-        const newPass = document.getElementById('newPassVerify').value;
+    function eksekusiGrabHtmlWeb() {
+        const inputPass = document.getElementById('apkSecurityPasswordInput').value;
+        const boxHasil = document.getElementById('resultLink');
 
-        if (secretInput !== developerSecretKey) {
-            alert("Gagal! Harus masukkan kata kunci yang tepat untuk rubah password.");
+        if (inputPass !== currentGrabSystemPassword) {
+            alert("Akses Ditolak! Password Web Ambil HTML Salah.");
             return;
         }
 
-        if (currentTheme === 'web2apk') {
+        const targetUrl = document.getElementById('grabTargetUrl').value.trim();
+        if (!targetUrl) {
+            alert("Masukkan URL website target terlebih dahulu!");
+            return;
+        }
+
+        boxHasil.style.display = "block";
+        boxHasil.style.borderColor = "#059669";
+        boxHasil.style.color = "#a7f3d0";
+        boxHasil.innerHTML = "⏳ Sedang mengambil kode HTML website target melalui proxy...";
+
+        const proxyUrl = "https://api.allorigins.win/get?url=" + encodeURIComponent(targetUrl);
+
+        fetch(proxyUrl)
+        .then(res => res.json())
+        .then(data => {
+            if (data && data.contents) {
+                const htmlCode = data.contents;
+                boxHasil.style.borderColor = "#10b981";
+                boxHasil.style.color = "#ecfdf5";
+                boxHasil.innerHTML = `
+                    <strong style="color: #34d399;">✅ KODE HTML BERHASIL DIAMBIL DENGAN SEMPURNA!</strong><br><br>
+                    <textarea readonly id="outputHtmlGrabbed" style="width:100%; height:150px; background:rgba(0,0,0,0.6); color:#34d399; font-family:monospace; font-size:12px; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.2); resize:vertical;">${escapeHtml(htmlCode)}</textarea>
+                    <button class="btn" onclick="salinHtmlGrabbed()" style="margin-top:10px; background:#059669; color:#fff; font-size:12px; padding:10px;">📋 SALIN KODE HTML</button>
+                `;
+            } else {
+                boxHasil.style.borderColor = "#f43f5e";
+                boxHasil.style.color = "#f43f5e";
+                boxHasil.innerText = "❌ Gagal mengambil isi HTML dari URL tersebut. Pastikan URL valid dan dapat diakses.";
+            }
+        })
+        .catch(() => {
+            boxHasil.style.borderColor = "#f43f5e";
+            boxHasil.style.color = "#f43f5e";
+            boxHasil.innerText = "❌ Gangguan jaringan atau restriksi CORS saat mengambil web.";
+        });
+    }
+
+    function escapeHtml(text) {
+        return text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    function salinHtmlGrabbed() {
+        const textarea = document.getElementById('outputHtmlGrabbed');
+        if(textarea) {
+            textarea.select();
+            document.execCommand('copy');
+            alert("📋 Kode HTML berhasil disalin ke clipboard!");
+        }
+    }
+
+    function ubahPasswordSistemDinamis() {
+        const secretInput = document.getElementById('devKeyVerify').value.trim();
+        const oldPass = document.getElementById('oldPassVerify').value;
+        const newPass = document.getElementById('newPassVerify').value;
+
+        if (currentTheme === 'htmlgrab') {
+            if (secretInput !== grabDeveloperSecretKey) {
+                alert("Gagal! Kata kunci salah.");
+                return;
+            }
+            if (oldPass !== currentGrabSystemPassword) {
+                alert("Gagal! Password lama salah.");
+                return;
+            }
+            if (!newPass.trim()) {
+                alert("Gagal! Password baru kosong.");
+                return;
+            }
+            currentGrabSystemPassword = newPass;
+            alert("🔒 Sukses! Password baru Web Ambil HTML berhasil diubah.");
+        } else if (currentTheme === 'web2apk') {
+            if (secretInput !== developerSecretKey) {
+                alert("Gagal! Harus masukkan kata kunci yang tepat.");
+                return;
+            }
             if (oldPass !== currentSystemPassword) {
                 alert("Gagal! Password lama salah.");
                 return;
@@ -1207,6 +1329,10 @@
             currentSystemPassword = newPass;
             alert("🔒 Sukses! Password baru Web To APK berhasil tersimpan.");
         } else if (currentTheme === 'html2web') {
+            if (secretInput !== developerSecretKey) {
+                alert("Gagal! Harus masukkan kata kunci yang tepat.");
+                return;
+            }
             if (oldPass !== currentHtmlSystemPassword) {
                 alert("Gagal! Password lama salah.");
                 return;
