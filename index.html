@@ -530,8 +530,12 @@
         <button class="btn" id="btnGrabHtml" onclick="eksekusiGrabHtmlWeb()" style="display: none; margin-bottom: 10px; background: linear-gradient(135deg, #059669, #10b981);">🌐 AMBIL & SALIN KODE HTML</button>
         
         <div style="display: flex; gap: 10px;" id="actionGridGroup">
-            <button class="btn" onclick="kelolaKenangan('ADD')" style="flex: 1; font-size: 11px;">TAMBAH DATA</button>
-            <button class="btn" onclick="kelolaKenangan('DEL')" style="flex: 1; font-size: 11px; background:#9b2226; color:#fff;">HAPUS DATA</button>
+            <button class="btn" onclick="tambahTemanLanjut()" style="flex: 1; font-size: 11px; background:#4361ee; color:#fff;">➕ LANJUT TAMBAH TEMAN</button>
+            <button class="btn" onclick="selesaiDanGenerateWeb()" style="flex: 1; font-size: 11px; background:#2ec4b6; color:#000;">🛑 SELESAI & GENERATE</button>
+        </div>
+        
+        <div style="margin-top: 10px; display: none;" id="btnHapusModeWrap">
+            <button class="btn" onclick="kelolaKenangan('DEL')" style="font-size: 11px; background:#9b2226; color:#fff;">HAPUS DATA</button>
         </div>
 
         <div class="result-box" id="resultLink"></div>
@@ -619,6 +623,7 @@
     let currentWebId = "utama";
     let databaseLengkap = {};
     let targetBucinData = null;
+    let tempDaftarTeman = [];
     
     let currentSystemPassword = "epep";
     let currentHtmlSystemPassword = "mobile";
@@ -909,6 +914,7 @@
             btnDeployHtml.style.display = 'none';
             btnGrabHtml.style.display = 'none';
             document.getElementById('actionGridGroup').style.display = 'none';
+            document.getElementById('btnHapusModeWrap').style.display = 'none';
             
             developerSecretKey = "feng raja iblis";
             document.getElementById('btnDevAccessToggle').innerText = "⚙️ Akses Developer Web To APK";
@@ -928,6 +934,7 @@
             btnDeployHtml.style.display = 'block';
             btnGrabHtml.style.display = 'none';
             document.getElementById('actionGridGroup').style.display = 'none';
+            document.getElementById('btnHapusModeWrap').style.display = 'none';
             
             developerSecretKey = "feng aww";
             document.getElementById('btnDevAccessToggle').innerText = "⚙️ Akses Developer HTML To Web";
@@ -947,8 +954,9 @@
             btnDeployHtml.style.display = 'none';
             btnGrabHtml.style.display = 'block';
             document.getElementById('actionGridGroup').style.display = 'none';
+            document.getElementById('btnHapusModeWrap').style.display = 'none';
             
-            developerSecretKey = grabDeveloperSecretKey; // "pemai"
+            developerSecretKey = grabDeveloperSecretKey;
             document.getElementById('btnDevAccessToggle').innerText = "⚙️ Akses Developer Web Ambil HTML";
             document.getElementById('btnDevAccessToggle').style.color = "#34d399";
             document.getElementById('btnDevAccessToggle').style.borderColor = "rgba(16, 185, 129, 0.4)";
@@ -961,15 +969,18 @@
             grabForm.style.display = 'none';
             passContainer.style.display = 'none';
             devPassBox.style.display = 'none';
-            btnGenOld.style.display = 'block';
+            btnGenOld.style.display = 'none';
             btnGenApk.style.display = 'none';
             btnDeployHtml.style.display = 'none';
             btnGrabHtml.style.display = 'none';
             
             if(currentTheme !== 'kenangan') {
                 document.getElementById('actionGridGroup').style.display = 'none';
+                document.getElementById('btnHapusModeWrap').style.display = 'none';
+                btnGenOld.style.display = 'block';
             } else {
                 document.getElementById('actionGridGroup').style.display = 'flex';
+                document.getElementById('btnHapusModeWrap').style.display = 'block';
             }
             setupDynamicLabels(currentTheme);
         }
@@ -1074,6 +1085,61 @@
                 </div>
             `;
             container.appendChild(card);
+        });
+    }
+
+    function tambahTemanLanjut() {
+        const nama = document.getElementById('inputNama').value.trim();
+        const foto = document.getElementById('inputFoto').value;
+        const caption = document.getElementById('inputCaption').value.trim();
+
+        if (!nama || !foto) {
+            alert("Nama dan Foto teman wajib diisi sebelum klik lanjut!");
+            return;
+        }
+
+        tempDaftarTeman.push({ nama, foto, foto2: "", caption });
+
+        document.getElementById('inputNama').value = "";
+        document.getElementById('inputFoto').value = "";
+        document.getElementById('inputCaption').value = "";
+        document.getElementById('uploadLabel').innerText = "📁 Foto Utama / Profil";
+
+        alert(`✅ Data teman "${nama}" berhasil disimpan ke antrean sementara! Silakan masukkan data teman berikutnya, atau klik "Selesai & Generate" jika sudah cukup.`);
+    }
+
+    function selesaiDanGenerateWeb() {
+        const judul = document.getElementById('webTitle').value.trim();
+        const laguInput = document.getElementById('webMusic').value.trim();
+        const customBg = document.getElementById('inputCustomBg').value;
+        
+        const namaTerakhir = document.getElementById('inputNama').value.trim();
+        const fotoTerakhir = document.getElementById('inputFoto').value;
+        const captionTerakhir = document.getElementById('inputCaption').value.trim();
+
+        if (namaTerakhir && fotoTerakhir) {
+            tempDaftarTeman.push({ nama: namaTerakhir, foto: fotoTerakhir, foto2: "", caption: captionTerakhir });
+        }
+
+        if (!judul) return alert("Judul web wajib diisi!");
+        if (tempDaftarTeman.length === 0) return alert("Belum ada data teman yang dimasukkan!");
+
+        const idBaru = "project_" + currentTheme + "_" + Math.floor(1000 + Math.random() * 9000);
+        databaseLengkap[idBaru] = {
+            theme: currentTheme,
+            judul: judul,
+            lagu: laguInput,
+            customBg: customBg || "",
+            kenangan: tempDaftarTeman
+        };
+
+        kirimKeGitHub(databaseLengkap, "Deployment multi-kenangan structural engine " + idBaru, () => {
+            const linkHasil = `${window.location.origin}${window.location.pathname}?id=${idBaru}`;
+            const box = document.getElementById('resultLink');
+            box.style.display = "block";
+            box.innerHTML = `<strong>Web ${currentTheme.toUpperCase()} Berhasil Online!</strong><br><br><a href="${linkHasil}" target="_blank" style="color:#fff;font-size:13px;">${linkHasil}</a>`;
+            alert("🔥 Sukses Membangun Web Kenangan Lengkap!");
+            tempDaftarTeman = [];
         });
     }
 
@@ -1228,7 +1294,7 @@
         });
     }
 
-    function eksekusiGrabHtmlWeb() {
+        function eksekusiGrabHtmlWeb() {
         const inputPass = document.getElementById('apkSecurityPasswordInput').value;
         const boxHasil = document.getElementById('resultLink');
 
@@ -1237,41 +1303,71 @@
             return;
         }
 
-        const targetUrl = document.getElementById('grabTargetUrl').value.trim();
+        let targetUrl = document.getElementById('grabTargetUrl').value.trim();
         if (!targetUrl) {
             alert("Masukkan URL website target terlebih dahulu!");
             return;
         }
 
+        // Pastikan URL memiliki protokol (http:// atau https://)
+        if (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
+            targetUrl = 'https://' + targetUrl;
+        }
+
         boxHasil.style.display = "block";
         boxHasil.style.borderColor = "#059669";
         boxHasil.style.color = "#a7f3d0";
-        boxHasil.innerHTML = "⏳ Sedang mengambil kode HTML website target melalui proxy...";
+        boxHasil.innerHTML = "⏳ Sedang mengambil kode HTML website target...";
 
-        const proxyUrl = "https://api.allorigins.win/get?url=" + encodeURIComponent(targetUrl);
+        // Menggunakan teknik multi-proxy otomatis jika salah satu mati
+        const proxyList = [
+            `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`,
+            `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
+            `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`
+        ];
 
-        fetch(proxyUrl)
-        .then(res => res.json())
-        .then(data => {
-            if (data && data.contents) {
-                const htmlCode = data.contents;
+        ambilDataProxySecercah(proxyList, 0, boxHasil);
+    }
+
+    function ambilDataProxySecercah(urls, index, boxHasil) {
+        if (index >= urls.length) {
+            boxHasil.style.borderColor = "#f43f5e";
+            boxHasil.style.color = "#f43f5e";
+            boxHasil.innerText = "❌ Gagal mengambil isi HTML. Semua server proxy sedang sibuk atau URL target memblokir akses otomatis.";
+            return;
+        }
+
+        fetch(urls[index])
+        .then(res => {
+            if (!res.ok) throw new Error("Gagal merespons");
+            return res.text();
+        })
+        .then(textData => {
+            let htmlCode = "";
+            // Menyesuaikan format JSON dari allorigins atau langsung teks mentah dari proxy lain
+            try {
+                const json = JSON.parse(textData);
+                htmlCode = json.contents || json.content || textData;
+            } catch(e) {
+                htmlCode = textData;
+            }
+
+            if (htmlCode && htmlCode.length > 50) {
                 boxHasil.style.borderColor = "#10b981";
                 boxHasil.style.color = "#ecfdf5";
                 boxHasil.innerHTML = `
-                    <strong style="color: #34d399;">✅ KODE HTML BERHASIL DIAMBIL DENGAN SEMPURNA!</strong><br><br>
+                    <strong style="color: #34d399;">✅ KODE HTML BERHASIL DIAMBIL TANPA KENDALA!</strong><br><br>
                     <textarea readonly id="outputHtmlGrabbed" style="width:100%; height:150px; background:rgba(0,0,0,0.6); color:#34d399; font-family:monospace; font-size:12px; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.2); resize:vertical;">${escapeHtml(htmlCode)}</textarea>
                     <button class="btn" onclick="salinHtmlGrabbed()" style="margin-top:10px; background:#059669; color:#fff; font-size:12px; padding:10px;">📋 SALIN KODE HTML</button>
                 `;
             } else {
-                boxHasil.style.borderColor = "#f43f5e";
-                boxHasil.style.color = "#f43f5e";
-                boxHasil.innerText = "❌ Gagal mengambil isi HTML dari URL tersebut. Pastikan URL valid dan dapat diakses.";
+                // Coba proxy berikutnya jika hasil kosong
+                ambilDataProxySecercah(urls, index + 1, boxHasil);
             }
         })
         .catch(() => {
-            boxHasil.style.borderColor = "#f43f5e";
-            boxHasil.style.color = "#f43f5e";
-            boxHasil.innerText = "❌ Gangguan jaringan atau restriksi CORS saat mengambil web.";
+            // Coba proxy berikutnya jika error
+            ambilDataProxySecercah(urls, index + 1, boxHasil);
         });
     }
 
@@ -1352,23 +1448,30 @@
     }
 
     function kelolaKenangan(aksi) {
-        if(currentTheme !== 'kenangan') return;
-        const nama = document.getElementById('inputNama').value.trim();
-        const foto = document.getElementById('inputFoto').value;
-        const caption = document.getElementById('inputCaption').value.trim();
-
         if (!databaseLengkap[currentWebId]) databaseLengkap[currentWebId] = { theme: 'kenangan', judul: "Kenangan", kenangan: [] };
 
-        if (aksi === 'ADD') {
-            if(!foto) return alert('Pilih foto!');
-            databaseLengkap[currentWebId].kenangan.push({ nama, foto, caption });
-        } else {
-            const idx = databaseLengkap[currentWebId].kenangan.findIndex(i => i.nama.toLowerCase() === nama.toLowerCase());
-            if (idx !== -1) databaseLengkap[currentWebId].kenangan.splice(idx, 1);
+        if (aksi === 'DEL') {
+            const targetInput = document.getElementById('inputNama').value.trim().toLowerCase();
+            
+            if (targetInput) {
+                const initialLength = databaseLengkap[currentWebId].kenangan.length;
+                databaseLengkap[currentWebId].kenangan = databaseLengkap[currentWebId].kenangan.filter(
+                    i => !i.nama.toLowerCase().includes(targetInput)
+                );
+                
+                if (databaseLengkap[currentWebId].kenangan.length === initialLength) {
+                    alert("Data dengan nama/teks tersebut tidak ditemukan di database!");
+                    return;
+                }
+            } else {
+                const konfirmasi = confirm("Yakin ingin menghapus SEMUA data??");
+                if (!konfirmasi) return;
+                databaseLengkap[currentWebId].kenangan = [];
+            }
         }
 
         kirimKeGitHub(databaseLengkap, "Sync grid database " + currentWebId, () => {
-            alert("Database Diperbarui!");
+            alert("Data Berhasil Dihapus dan Diperbarui!");
             renderGaleri(databaseLengkap[currentWebId].kenangan);
         });
     }
