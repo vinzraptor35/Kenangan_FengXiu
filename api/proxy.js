@@ -1,28 +1,50 @@
 export default async function handler(req, res) {
-    // Ambil URL target dari parameter query, contoh: /api/proxy?url=https://target.com/api
-    const targetUrl = req.query.url;
+    const { targetUrl, loginUrl, username, password, usernameField, passwordField, cookie } = req.query;
 
     if (!targetUrl) {
-        return res.status(400).json({ error: 'URL target tidak boleh kosong!' });
+        return res.status(400).json({ error: "URL target tidak boleh kosong!" });
     }
 
     try {
-        // Lakukan fetch dari server Vercel (bebas CORS)
-        const response = await fetch(targetUrl, {
-            headers: {
-                // Tambahkan User-Agent supaya tidak ditolak oleh web target
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0'
+        let headersToUse = {};
+
+        // --- SKenario 1: Jika pakai Cookie manual/sesi ---
+        if (cookie) {
+            headersToUse['Cookie'] = cookie;
+        } 
+        // --- SKENARIO 2: Jika pakai Username & Password ---
+        else if (loginUrl && username && password) {
+            const formData = new URLSearchParams();
+            formData.append(usernameField || 'username', username);
+            formData.append(passwordField || 'password', password);
+
+            const loginResponse = await fetch(loginUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData,
+                redirect: 'manual'
+            });
+
+            const setCookieHeader = loginResponse.headers.get('set-cookie');
+            if (setCookieHeader) {
+                headersToUse['Cookie'] = setCookieHeader;
             }
+        }
+        // --- SKENARIO 3: Tanpa Login (Web Publik Biasa) ---
+        // Biarkan headersToUse kosong, langsung tembak targetUrl.
+
+        // Ambil HTML dari target
+        const targetResponse = await fetch(targetUrl, {
+            method: 'GET',
+            headers: headersToUse
         });
 
-        const data = await response.text();
+        const htmlText = await targetResponse.text();
 
-        // Izinkan web Anda sendiri yang mengakses backend ini (CORS header untuk publik)
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.setHeader('Content-Type', response.headers.get('content-type') || 'text/plain');
-        
-        return res.status(200).send(data);
+        res.setHeader('Content-Type', 'text/html');
+        res.status(200).send(htmlText);
+
     } catch (error) {
-        return res.status(500).json({ error: 'Gagal mengambil data: ' + error.message });
+        res.status(500).json({ error: "Gagal mengambil halaman web: " + error.message });
     }
 }
