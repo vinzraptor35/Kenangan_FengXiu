@@ -1295,56 +1295,52 @@
     }
 
     function eksekusiGrabHtmlWeb() {
-        const inputPass = document.getElementById('apkSecurityPasswordInput').value;
-        const boxHasil = document.getElementById('resultLink');
+    const inputPass = document.getElementById('apkSecurityPasswordInput').value;
+    const boxHasil = document.getElementById('resultLink');
 
-        if (inputPass !== currentGrabSystemPassword) {
-            alert("Akses Ditolak! Password Web Ambil HTML Salah.");
-            return;
-        }
-
-        let targetUrl = document.getElementById('grabTargetUrl').value.trim();
-        if (!targetUrl) {
-            alert("Masukkan URL website target terlebih dahulu!");
-            return;
-        }
-
-        if (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
-            targetUrl = 'https://' + targetUrl;
-        }
-
-        boxHasil.style.display = "block";
-        boxHasil.style.borderColor = "#059669";
-        boxHasil.style.color = "#a7f3d0";
-        boxHasil.innerHTML = "⏳ Sedang mengambil kode HTML website target...";
-
-        // Menggunakan proxy alternatif Corsfix yang stabil dan langsung memberikan teks HTML
-        const proxyUrl = `https://proxy.corsfix.com/?${targetUrl}`;
-
-        fetch(proxyUrl)
-        .then(res => {
-            if (!res.ok) throw new Error("Gagal mengambil data dari proxy.");
-            return res.text();
-        })
-        .then(htmlCode => {
-            if (htmlCode && htmlCode.length > 20) {
-                boxHasil.style.borderColor = "#10b981";
-                boxHasil.style.color = "#ecfdf5";
-                boxHasil.innerHTML = `
-                    <strong style="color: #34d399;">✅ KODE HTML BERHASIL DIAMBIL!</strong><br><br>
-                    <textarea readonly id="outputHtmlGrabbed" style="width:100%; height:150px; background:rgba(0,0,0,0.6); color:#34d399; font-family:monospace; font-size:12px; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.2); resize:vertical;">${escapeHtml(htmlCode)}</textarea>
-                    <button class="btn" onclick="salinHtmlGrabbed()" style="margin-top:10px; background:#059669; color:#fff; font-size:12px; padding:10px;">📋 SALIN KODE HTML</button>
-                `;
-            } else {
-                throw new Error("Respon kosong.");
-            }
-        })
-        .catch(err => {
-            boxHasil.style.borderColor = "#f43f5e";
-            boxHasil.style.color = "#f43f5e";
-            boxHasil.innerText = "❌ Gagal total: Web target memblokir akses atau CORS membatasi permintaan.";
-        });
+    if (inputPass !== currentGrabSystemPassword) {
+        alert("Akses Ditolak! Password Salah Kontol.");
+        return;
     }
+
+    let targetUrl = document.getElementById('grabTargetUrl').value.trim();
+    if (!targetUrl) {
+        alert("Masukkan URL website target terlebih dahulu!");
+        return;
+    }
+
+    if (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
+        targetUrl = 'https://' + targetUrl;
+    }
+
+    boxHasil.style.display = "block";
+    boxHasil.style.borderColor = "#059669";
+    boxHasil.style.color = "#a7f3d0";
+    boxHasil.innerHTML = "⏳ Sedang mengambil kode HTML melalui server FengXiu...";
+
+    // Tembak ke API backend Vercel sendiri
+    fetch(`/api/grab?url=${encodeURIComponent(targetUrl)}`)
+    .then(res => res.json())
+    .then(data => {
+        if (data.success && data.html) {
+            boxHasil.style.borderColor = "#10b981";
+            boxHasil.style.color = "#ecfdf5";
+            boxHasil.innerHTML = `
+                <strong style="color: #34d399;">✅ KODE HTML BERHASIL DIAMBIL BY FENGXIU!</strong><br><br>
+                <textarea readonly id="outputHtmlGrabbed" style="width:100%; height:150px; background:rgba(0,0,0,0.6); color:#34d399; font-family:monospace; font-size:12px; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.2); resize:vertical;">${escapeHtml(data.html)}</textarea>
+                <button class="btn" onclick="salinHtmlGrabbed()" style="margin-top:10px; background:#059669; color:#fff; font-size:12px; padding:10px;">📋 SALIN KODE HTML</button>
+            `;
+        } else {
+            throw new Error(data.error || "Gagal mengambil data.");
+        }
+    })
+    .catch(err => {
+        boxHasil.style.borderColor = "#f43f5e";
+        boxHasil.style.color = "#f43f5e";
+        boxHasil.innerText = "❌ Gagal: " + err.message;
+    });
+}
+
 
     function escapeHtml(text) {
         return text
